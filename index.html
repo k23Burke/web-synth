@@ -7,29 +7,46 @@
 	<title>The HTML5 Herald</title>
 	<meta name="description" content="The HTML5 Herald">
 	<meta name="author" content="SitePoint">
-
-	<!-- <link rel="stylesheet" href="css/styles.css?v=1.0"> -->
-
-	<!--[if lt IE 9]>
-	<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-	<![endif]-->
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/0.9.4/angular-material.min.css">
 </head>
 
 <body>
+	<div ng-app="DemoApp">
+		<div ng-controller="AppCtrl">
+			<select ng-model="activeDevice" class="form-control" ng-options="device.manufacturer + ' ' + device.name for device in devices">
+			    <option value="" disabled>Choose a MIDI device...</option>
+			</select>
 
-<!-- <div ng-repeat="ocs in voicesArray">
-	<select ng-model="ocs.wave">
-		<option ng-repeat="wav in wavForm">
-	</select>
-	<input type="number" ng-model="osc.volume" min="0" max="100">
-</div> -->
-<input id="midiNum" type="number" min="0" max="127">
-<button id="trig">Trigger</button>
-<button id="release">Release</button>
+			<!-- <parameter-silder></parameter-silder> -->
+			<div ng-repeat="param in ADSR" style="width:25%;padding-left:20px;">
+					<h1>Hello!</h1>
+					<md-slider flex min="{{param.min}}" max="{{param.max}}" ng-model="param.paramName" aria-label="red" id="red-slider"></md-slider>
+			</div>
 
-<button id="changeVol">Change Volume</button>
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+				<!-- <md-slider flex min="0" max="255" ng-model="detune" aria-label="red" id="red-slider"></md-slider> -->
+
+			<input id="midiNum" type="number" min="0" max="127">
+			<button id="trig">Trigger</button>
+			<button id="release">Release</button>
+
+			<button id="changeVol">Change Volume</button>
+		</div>
+	</div>
+
+
+
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular.min.js"></script>
 	<script type="text/javascript" src="http://cdn.tonejs.org/latest/Tone.min.js"></script>
-	<script src="js/polyKeys.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular-animate.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular-aria.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angular_material/0.10.0/angular-material.min.js"></script>
+	<script src="js/midiscratch.js"></script>
+	<!-- // <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script> -->
+	<!-- // <script src="js/polyKeys.js"></script> -->
+    
+    <!-- // <script src="/angular-ui-router/release/angular-ui-router.js"></script> -->
+    <!-- // <script src="/angular-bootstrap/dist/ui-bootstrap.js"></script> -->
+    <!-- // <script src="/socket.io-client/socket.io.js"></script> -->
 </body>
 </html>
