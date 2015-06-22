@@ -5,29 +5,102 @@
 	<meta charset="utf-8">
 
 	<title>The HTML5 Herald</title>
-	<meta name="description" content="The HTML5 Herald">
-	<meta name="author" content="SitePoint">
+	<meta name="description" content="WebSynth">
+	<!-- <meta name="author" content="SitePoint"> -->
     <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/0.9.4/angular-material.min.css">
 </head>
 
 <body>
 	<div ng-app="DemoApp">
 		<div ng-controller="AppCtrl">
-			<select ng-model="activeDevice" class="form-control" ng-options="device.manufacturer + ' ' + device.name for device in devices">
-			    <option value="" disabled>Choose a MIDI device...</option>
-			</select>
 
-			<!-- <parameter-silder></parameter-silder> -->
-			<div ng-repeat="param in ADSR" style="width:25%;padding-left:20px;">
-					<h1>Hello!</h1>
-					<md-slider flex min="{{param.min}}" max="{{param.max}}" ng-model="param.paramName" aria-label="red" id="red-slider"></md-slider>
+			<div style="width:100%;padding:20px;float:left">
+				<select ng-model="activeDevice" class="form-control" ng-options="device.manufacturer + ' ' + device.name for device in devices">
+				    <option value="" disabled>Choose a MIDI device...</option>
+				</select>
 			</div>
 
-				<!-- <md-slider flex min="0" max="255" ng-model="detune" aria-label="red" id="red-slider"></md-slider> -->
 
-			<input id="midiNum" type="number" min="0" max="127">
-			<button id="trig">Trigger</button>
-			<button id="release">Release</button>
+			<div style="width:25%;padding-left:20px;float:left">
+				<h1>{{OSC1.number}}</h1>
+				<div>
+					<select ng-model="OSC1.wavForm" ng-options="wav for wav in wavForms">
+					</select>
+					<button ng-click="activate(1)" ng-hide="OSC1.active">Activate</button>
+					<button ng-click="deactiveate(1)" ng-show="OSC1.active">Deactiveate</button>
+				</div>
+				<h6>Attack - {{OSC1.attack / 1000}} seconds</h6>
+				<md-slider flex min="0" max="10000" ng-model="OSC1.attack" aria-label="red" id="red-slider"></md-slider>
+				<h6>Decay - {{OSC1.decay / 1000}} seconds</h6>
+				<md-slider flex min="0" max="10000" ng-model="OSC1.decay" aria-label="red" id="red-slider"></md-slider>
+				<h6>Sustain - {{OSC1.sustain / 1000}} volume</h6>
+				<md-slider flex min="0" max="1000" ng-model="OSC1.sustain" aria-label="red" id="red-slider"></md-slider>
+				<h6>Release - {{OSC1.release / 1000}} seconds</h6>
+				<md-slider flex min="0" max="10000" ng-model="OSC1.release" aria-label="red" id="red-slider"></md-slider>
+			</div>
+
+
+			<div style="width:25%;padding-left:20px;float:left">
+				<h1>{{OSC2.number}}</h1>
+				<div>
+					<select ng-model="OSC2.wavForm" ng-options="wav for wav in wavForms">
+					</select>
+					<button ng-click="activate(2)" ng-hide="OSC2.active">Activate</button>
+					<button ng-click="deactiveate(2)" ng-show="OSC2.active">Deactiveate</button>
+				</div>
+				<h6>Attack - {{OSC2.attack / 1000}} seconds</h6>
+				<md-slider flex min="0" max="10000" ng-model="OSC2.attack" aria-label="blue" id="blue-slider"></md-slider>
+				<h6>Decay - {{OSC2.decay / 1000}} seconds</h6>
+				<md-slider flex min="0" max="10000" ng-model="OSC2.decay" aria-label="blue" id="blue-slider"></md-slider>
+				<h6>Sustain - {{OSC2.sustain / 1000}} volume</h6>
+				<md-slider flex min="0" max="1000" ng-model="OSC2.sustain" aria-label="blue" id="blue-slider"></md-slider>
+				<h6>Release - {{OSC2.release / 1000}} seconds</h6>
+				<md-slider flex min="0" max="10000" ng-model="OSC2.release" aria-label="blue" id="blue-slider"></md-slider>
+			</div>
+
+			<!--ng-change="wavChange(filter.name)" -->
+
+			<div style="width:25%;padding-left:20px;float:left">
+				<!--<h1>FILTER</h1>
+				<div>
+					{{theFilt.type}}
+					<select ng-model="theFilt.type" ng-options="filter for filter in filterTypes">
+					</select>
+				</div>
+
+
+				<h6>{{theFilt.freq}}</h6>
+				<md-slider flex min="0" max="2000" ng-model="theFilt.freq" aria-label="blue" id="blue-slider"></md-slider>-->
+
+
+
+				<h1>{{FLT1.number}}</h1>
+				<div>
+					{{FLT1.type}}
+					<select ng-model="FLT1.type" ng-options="filter for filter in filterTypes">
+					</select>
+				</div>
+
+
+				<h6>{{FLT1.freq}}</h6>
+				<md-slider flex min="0" max="2000" ng-model="FLT1.freq" aria-label="blue" id="blue-slider"></md-slider>
+
+				<h1>{{FLT2.number}}</h1>
+				<div>
+					{{FLT2.type}}
+					<select ng-model="FLT2.type" ng-options="filter for filter in filterTypes">
+					</select>
+				</div>
+
+				<h6>{{FLT2.freq}}</h6>
+				<md-slider flex min="40" max="2000" ng-model="FLT2.freq" aria-label="blue" id="blue-slider"></md-slider>
+			</div>
+
+			<!-- <parameter-silder></parameter-silder> -->
+			<!-- <div ng-repeat="param in ADSR" style="width:25%;padding-left:20px;">
+					<h1>{{ param.Name }}</h1>
+					<md-slider flex min="{{param.min}}" max="{{param.max}}" ng-model="param.value" aria-label="red" id="red-slider"></md-slider>
+			</div> -->
 
 			<button id="changeVol">Change Volume</button>
 		</div>
@@ -42,6 +115,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular-aria.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angular_material/0.10.0/angular-material.min.js"></script>
 	<script src="js/midiscratch.js"></script>
+	<!--<script src="js/new.js"></script>-->
 	<!-- // <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script> -->
 	<!-- // <script src="js/polyKeys.js"></script> -->
     

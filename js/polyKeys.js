@@ -24,7 +24,7 @@ var Osc = function (note) {
 
 	//initializing route
 	this.volume.connect(this.filter);
-	// this.sub.connect(this.filter);
+	this.sub.connect(this.filter);
 	// this.lfo.connect(this.filter.frequency);
 	// this.lfo.sync();
 	this.filter.toMaster();

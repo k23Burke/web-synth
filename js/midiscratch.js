@@ -14,15 +14,6 @@ angular
             connect: _connect
         };
     }]);
-
-// angular
-//     .directive('ParameterSilder', function() {
-//         return {
-//             restrict: 'E',
-//             template: '<md-slider flex min="{{param.min}}" max="{{param.max}}" ng-model="{{param.value}}" aria-label="red" id="red-slider">'
-//         }
-//     });
-
 //WHERE THE onMidi Trigger happens
 angular
     .module('Synth', ['WebAudio'])//, 'WebAnalyser'])
@@ -110,21 +101,42 @@ angular
 //WILL NEED TO REPLACE------------------!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 angular
     .module('WebAudio', [])
-    // .service('SYN', function () {
+    .service('Filt', function () {
+        function Filter() {
+            this.filter = new Tone.Filter(800, "lowpass");
+            this.options = ["lowpass", "highpass", "bandpass", "lowshelf", "highshelf", "notch", "allpass", "peaking"];
+            this.min = 50;
+            this.max = 1600;
 
-    // })
+            return this;
+        }
+
+        Filter.prototype.changeType = function (type) {
+            this.filter.type = type;
+        }
+
+        Filter.prototype.changeFrequency = function (freq) {
+            this.filter.frequency.value = freq;   
+        }
+
+        return Filter;
+    })
     .service('Oscill', function () {
         function Oscillator() {
             this.keys = [];
             this.active = false;
             this.detune = 0;
-            this.subVolume = -100;
-            this.attack = 0.01;
-            this.decay = 0.1;
-            this.sustain = 0.5;
-            this.release = 1;
+            this.subVolume = -50;
+            this.attack = 10;
+            this.decay = 100;
+            this.sustain = 500;
+            this.release = 5000;
+            this.wavForm = 'sine';
+            this.filterType = 'lowpass';
+            this.filterFreq = 400;
             this.volume = new Tone.Volume(0);
-            this.volume.toMaster();
+            // this.filter = new Tone.Filter(this.filterFreq, this.filterType);
+            // this.volume.toMaster();
             return this;
         }
         Oscillator.prototype.createNote = function(midiKey) {
@@ -146,11 +158,30 @@ angular
         }
         Oscillator.prototype.createKeyOsc = function() {
             var key = new Tone.MonoSynth();
-            key.envelope.attack = this.attack;
-            key.envelope.decay = this.decay;
-            key.envelope.sustain = this.sustain;
-            key.envelope.release = this.release;
+
+            key.envelope.attack = this.attack/1000;
+            key.envelope.decay = this.decay/1000;
+            key.envelope.sustain = this.sustain/1000;
+            key.envelope.release = this.release/1000;
+            key.oscillator.type = this.wavForm;
+            key.detune.value = this.detune;
+            key.filter.type  = this.filterType;
+            key.filter.frequency.value  = this.filterFreq;
+            // console.log("freq", this.filterFreq);
+            // console.log("type", this.filterType);
+
+            // key.filter = new Tone.Filter(this.filterFreq, this.filterType);
+            // key.filter.frequency.value = this.filterFreq;
+            // key.filter.type = this.filterType;
+            // key.filter.frequency.value = this.filterFreq;
+            console.log("CREATE", key);
+            // .filter.toMaster();
+            // key.toMaster();
+
+            // console.log("DONE CREATE", key.filter.type);
+
             key.chain(this.volume);
+
             return key;
         }
         Oscillator.prototype.midiToKey = function(midiKey) {
@@ -161,31 +192,47 @@ angular
             return theNote;
         }
         Oscillator.prototype.releaseNote = function(midiKey) {
+            var self = this;
             this.keys = this.keys.filter(function (keyObj) {
                 if(keyObj.hasOwnProperty(midiKey)) {
-                    keyObj[midiKey].main.triggerRelease();
-                    keyObj[midiKey].sub.triggerRelease();
+                    // console.log('rELEASE TIME', self.release/1000)
+                    keyObj[midiKey].main.triggerEnvelopeRelease(self.release/1000);
+                    keyObj[midiKey].sub.triggerEnvelopeRelease(self.release/1000);
+
+                    var interval = window.setInterval( function() {
+
+                        //dispose of both main and sub
+                        keyObj[midiKey].main.dispose();
+                        keyObj[midiKey].sub.dispose();
+                        window.clearInterval(interval);
+
+                    }, self.release);
+
                     return false;
                 }
                 else return true;
             });
         }
         Oscillator.prototype.changeDetune = function(value) {
-            console.log('DETUNEING');
+            console.log('DETUNEING', value/100);
             this.keys.forEach(function (key) {
-                key.main.detune.value = value;
-                key.sub.detune.value = value;
+                console.log(key);
+                key.main.detune.value = value/100;
+                key.sub.detune.value = value/100;
             })
         }
-        Oscillator.prototype.routeToFilter = function() {
-
+        // Oscillator.prototype.changeAttack = function(value) {
+        //     this.attack = value/1000;
+        // }
+        Oscillator.prototype.changeWavForm = function(wavForm) {
+            this.wavForm = wavForm;
+        }
+        Oscillator.prototype.connectToFilter = function(filter) {
+            this.volume.connect(filter);
         }
 
         return Oscillator;
     })
-    // .service('Filt', function() {
-
-    // })
     .service('AMP', function() {
         var self;
 
@@ -292,154 +339,236 @@ angular
 
         return Filter;
     })
-    .factory('AudioEngine', ['OSC', 'Oscill', 'AMP', 'FTR', '$window', function(Oscillator, Oscill, Amp, Filter, $window) {
-        var syn = [new Oscill(), new Oscill(), new Oscill(), new Oscill()];
+    .factory('AudioEngine', ['OSC', 'Oscill', 'AMP', 'FTR', 'Filt', '$window', function(Oscillator, Oscill, Amp, Filter, Filt, $window) {
+        var syn = [new Oscill(), new Oscill()]
+
+        var filt = new Tone.Filter(200, 'lowpass');
+        var filt2 = new Tone.Filter(200, 'lowpass');
+
+        syn[0].volume.connect(filt);
+        syn[1].volume.connect(filt2);
+        filt.toMaster();
+        filt2.toMaster();
+
         syn[0].active = true;
+        syn[1].active = true;
 
 
-        var self = this;
-        self.activeNotes = [];
-        self.settings = {
-            attack: 0.05,
-            release: 0.05,
-            portamento: 0.05
-        };
 
-        self.detuneAmount = 0;
-
-        self.currentFreq = null;
-
-        function _createContext() {
-            self.ctx = new $window.AudioContext();
-        }
-
-        function _createAmp() {
-            self.amp = new Amp(self.ctx);
-        }
-
-        function _createOscillators() {
-            //osc types: sine, square, triangle, sawtooth
-            // osc1
-            self.osc1 = new Oscillator(self.ctx);
-            self.osc1.setOscType('sine');
-        }
-
-        function _setAttack(a) {
-            if(a) {
-                self.settings.attack = a / 1000;
-            }
-        }
-
-        function _setRelease(r) {
-            if(r) {
-                self.settings.release = r / 1000;
-            }
-        }
-
-        function _createFilters() {
-            self.filter1 = new Filter(self.ctx);
-            self.filter1.setFilterFrequency(50);
-            self.filter1.setFilterResonance(0);
-        }
-
-        function _wire(Analyser) {
-            self.osc1.connect(self.amp.gain);
-
-            if(Analyser) {
-                self.analyser = Analyser;
-                self.analyser.connect(self.ctx, self.amp);
-            } else {
-                self.amp.connect(self.ctx.destination);
-            }
-
-            self.amp.setVolume(0.0, 0); //mute the sound
-            self.osc1.start(0); // start osc1
-        }
-
-        function _connectFilter() {
-            self.amp.disconnect();
-            self.amp.connect(self.filter1.filter);
-            if(self.analyser) {
-                self.analyser.connect(self.ctx, self.filter1);
-            } else {
-                self.filter1.connect(self.ctx.destination);
-            }
-        }
-
-        function _disconnectFilter() {
-            self.filter1.disconnect();
-            self.amp.disconnect();
-            if(self.analyser) {
-                self.analyser.connect(self.ctx, self.amp);
-            } else {
-                self.amp.connect(self.ctx.destination);
-            }
-        }
-
-        function _mtof(note) {
-            return 440 * Math.pow(2, (note - 69) / 12);
-        }
-
-        function _vtov (velocity) {
-            return (velocity / 127).toFixed(2);
-        }
 
         function _noteOn(note, velocity) {
             syn.forEach(function (osc) {
                 if(osc.active) osc.createNote(note);
             });
-
-            // self.activeNotes.push(note);
-
-            // self.osc1.cancel();
-            // self.currentFreq = _mtof(note);
-            // self.osc1.setFrequency(self.currentFreq + self.detuneAmount, self.settings.portamento);
-
-            // self.amp.cancel();
-
-            // self.amp.setVolume(_vtov(velocity), self.settings.attack);
         }
 
         function _noteOff(note) {
             syn.forEach(function (osc) {
                 osc.releaseNote(note);
             });
-            // var position = self.activeNotes.indexOf(note);
-            // if (position !== -1) {
-            //     self.activeNotes.splice(position, 1);
-            // }
-
-            // if (self.activeNotes.length === 0) {
-            //     // shut off the envelope
-            //     self.amp.cancel();
-            //     self.currentFreq = null;
-            //     self.amp.setVolume(0.0, self.settings.release);
-            // } else {
-            //     // in case another note is pressed, we set that one as the new active note
-            //     self.osc1.cancel();
-            //     self.currentFreq = _mtof(self.activeNotes[self.activeNotes.length - 1]);
-            //     self.osc1.setFrequency(self.currentFreq + self.detuneAmount, self.settings.portamento);
-            // }
         }
+        //OLD CODE
+            var self = this;
+            self.activeNotes = [];
+            self.settings = {
+                attack: 0.05,
+                release: 0.05,
+                portamento: 0.05
+            };
 
-        function _detune(d) {
-            if(self.currentFreq) {
-                //64 = no detune
-                if(64 === d) {
-                    self.osc1.setFrequency(self.currentFreq, self.settings.portamento);
-                    self.detuneAmount = 0;
-                } else {
-                    var detuneFreq = Math.pow(2, 1 / 12) * (d - 64);
-                    self.osc1.setFrequency(self.currentFreq + detuneFreq, self.settings.portamento);
-                    self.detuneAmount = detuneFreq;
+            self.detuneAmount = 0;
+
+            self.currentFreq = null;
+
+            function _createContext() {
+                self.ctx = new $window.AudioContext();
+            }
+
+            function _createAmp() {
+                self.amp = new Amp(self.ctx);
+            }
+
+            function _createOscillators() {
+                //osc types: sine, square, triangle, sawtooth
+                // osc1
+                self.osc1 = new Oscillator(self.ctx);
+                self.osc1.setOscType('sine');
+            }
+
+            function _setAttack(a) {
+                if(a) {
+                    self.settings.attack = a / 1000;
                 }
             }
-        }
+
+            function _setRelease(r) {
+                if(r) {
+                    self.settings.release = r / 1000;
+                }
+            }
+
+            function _createFilters() {
+                self.filter1 = new Filter(self.ctx);
+                self.filter1.setFilterFrequency(50);
+                self.filter1.setFilterResonance(0);
+            }
+
+            function _wire(Analyser) {
+                self.osc1.connect(self.amp.gain);
+
+                if(Analyser) {
+                    self.analyser = Analyser;
+                    self.analyser.connect(self.ctx, self.amp);
+                } else {
+                    self.amp.connect(self.ctx.destination);
+                }
+
+                self.amp.setVolume(0.0, 0); //mute the sound
+                self.osc1.start(0); // start osc1
+            }
+
+            function _connectFilter() {
+                self.amp.disconnect();
+                self.amp.connect(self.filter1.filter);
+                if(self.analyser) {
+                    self.analyser.connect(self.ctx, self.filter1);
+                } else {
+                    self.filter1.connect(self.ctx.destination);
+                }
+            }
+
+            function _disconnectFilter() {
+                self.filter1.disconnect();
+                self.amp.disconnect();
+                if(self.analyser) {
+                    self.analyser.connect(self.ctx, self.amp);
+                } else {
+                    self.amp.connect(self.ctx.destination);
+                }
+            }
+
+            function _mtof(note) {
+                return 440 * Math.pow(2, (note - 69) / 12);
+            }
+
+            function _vtov (velocity) {
+                return (velocity / 127).toFixed(2);
+            }
+
+
+            function _detune(d) {
+                if(self.currentFreq) {
+                    //64 = no detune
+                    if(64 === d) {
+                        self.osc1.setFrequency(self.currentFreq, self.settings.portamento);
+                        self.detuneAmount = 0;
+                    } else {
+                        var detuneFreq = Math.pow(2, 1 / 12) * (d - 64);
+                        self.osc1.setFrequency(self.currentFreq + detuneFreq, self.settings.portamento);
+                        self.detuneAmount = detuneFreq;
+                    }
+                }
+            }
 
         function getAllOscillators() {
             console.log('RETURNING ALL');
             return syn;
         }
+
+        function changeDetune(value) {
+            // console.log('AVLEU', value)
+            syn.forEach(function (osc) {
+                osc.changeDetune(value)
+                // osc.wavForm = wavForm;
+            })
+            // syn[0].changeAttack(value)
+        }
+
+        //OSC 1
+            function activeateOSC1() {
+                syn[0].active = true;
+            }
+            function deactiveateOSC1() {
+                syn[0].active = false;
+            }
+            function changeWavForm(wavForm) {
+                console.log('HERE', wavForm);
+                syn.forEach(function (osc) {
+                    osc.wavForm = wavForm;
+                })
+            }
+            function changeAttack(value) {
+                console.log('HERE', value);
+                syn[0].attack = value;
+            }
+            function changeDecay(value) {
+                console.log('HERE', value);
+                syn[0].decay = value;
+            }
+            function changeSustain(value) {
+                console.log('HERE', value);
+                syn[0].sustain = value;
+            }
+            function changeRelease(value) {
+                console.log('HERE', value);
+                syn[0].release = value;
+            }
+
+        //OSC 2
+            function activeateOSC2() {
+                syn[1].active = true;
+            }
+            function deactiveateOSC2() {
+                syn[1].active = false;
+            }
+            function changeWavForm2(wavForm) {
+                console.log('HERE2', wavForm);
+                syn.forEach(function (osc) {
+                    osc.wavForm = wavForm;
+                })
+            }
+            function changeAttack2(value) {
+                console.log('attack', value);
+                syn[1].attack = value;
+            }
+            function changeDecay2(value) {
+                console.log('decay', value);
+                syn[1].decay = value;
+            }
+            function changeSustain2(value) {
+                console.log('HERE2', value);
+                syn[1].sustain = value;
+            }
+            function changeRelease2(value) {
+                console.log('HERE2', value);
+                syn[1].release = value;
+            }
+
+
+        //FLT 1
+            function changeFilt1Type(type) {
+                filt.type = type;
+                console.log('changeType', type);
+            }
+            function changeFilt1Freq (freq) {
+                filt.frequency.value = freq;
+            }
+
+        //FLT 2
+            function changeFilt2Type(type) {
+                filt2.type = type;
+                console.log('changeType', type);
+            }
+            function changeFilt2Freq (freq) {
+                filt2.frequency.value = freq;
+            }
+            // function changeFilt2Type(type) {
+            //     syn[1].filterType = type;
+            //     console.log('changeType', type);
+            // }
+            // function changeFilt2Freq (freq) {
+            //     syn[1].filterFreq = freq;
+            // }
 
         return {
             init: function() {
@@ -448,8 +577,38 @@ angular
                 _createOscillators();
                 _createFilters();
             },
-            // detuune, Oscill.changeDetune,
+
+
+
             getAllOscillators: getAllOscillators,
+            detuune: changeDetune,
+
+            changeAttack: changeAttack,
+            changeDecay: changeDecay,
+            changeSustain: changeSustain,
+            changeRelease: changeRelease,
+            changeWavForm: changeWavForm,
+
+            changeAttack2: changeAttack2,
+            changeDecay2: changeDecay2,
+            changeSustain2: changeSustain2,
+            changeRelease2: changeRelease2,
+            changeWavForm2: changeWavForm2,
+
+            changeFilt1Freq: changeFilt1Freq,
+            changeFilt1Type: changeFilt1Type,
+
+            changeFilt2Freq: changeFilt2Freq,
+            changeFilt2Type: changeFilt2Type,
+
+            activeateOSC1: activeateOSC1,
+            deactiveateOSC1: deactiveateOSC1,
+
+            activeateOSC2: activeateOSC2,
+            deactiveateOSC2: deactiveateOSC2,
+            // changeFiltType: changeFiltType,
+            // changeFiltFreq: changeFiltFreq,
+
             wire: _wire,
             noteOn: _noteOn,
             noteOff: _noteOff,
@@ -489,35 +648,87 @@ angular
 angular
     .module('DemoApp', ['WebMIDI', 'Synth'])
     .controller('AppCtrl', ['$scope', 'Devices', 'DSP', 'AudioEngine', function($scope, devices, DSP, Synth) {
-        // console.log('Devices', devices);
-        // console.log('DSP', DSP);
         console.log('Synth', Synth.getAllOscillators());
         $scope.devices = [];
         $scope.detune = 0;
+        var oscArray = Synth.getAllOscillators();
+        var osc = oscArray[0];
+        var osc2 = oscArray[1];
 
-        $scope.oscArray = Synth.getAllOscillators();
-        // oscArray.forEach(function (osc) {
+        // $scope.theFilt = {
+        //     freq: 80,
+        //     type: 'lowpass'
+        // }
 
-        // })
-        $scope.ADSR = [{
-            paramName: 'Attack',
-            min: 0,
-            max: 10000,
-        },{
-            paramName: 'Decay',
-            min: 0,
-            max: 10000,
-        },{
-            paramName: 'Sustain',
-            min: 0,
-            max: 10000,
-        },{
-            paramName: 'Release',
-            min: 0,
-            max: 10000,
-        }]
-        // $scope.wavTypes = []
-        // $scope.oscillators = 
+        $scope.wavForms = ['sine','square','triangle','sawtooth', 'pulse', 'pwm'];
+        $scope.filterTypes = ["lowpass", "highpass", "bandpass", "lowshelf", "highshelf", "notch", "allpass", "peaking"];
+        $scope.OSC1 = {
+            number: 1,
+            active: osc.active,
+            wavForm: osc.wavForm,
+
+            attack: osc.attack,
+            decay: osc.decay,
+            sustain: osc.sustain,
+            release: osc.release,
+
+            detune: osc.detune,
+            subVolume: osc.subVolume
+        }
+
+        $scope.OSC2 = {
+            number: 2,
+            active: osc2.active,
+            wavForm: osc2.wavForm,
+
+            attack: osc2.attack,
+            decay: osc2.decay,
+            sustain: osc2.sustain,
+            release: osc2.release,
+
+            detune: osc2.detune,
+            subVolume: osc2.subVolume
+        }
+
+        $scope.activate = function (num) {
+            if(num === 1) {
+                $scope.OSC1.active = true;
+                Synth.activeateOSC1();
+            } else {
+                $scope.OSC2.active = true;
+                Synth.activeateOSC1();
+            }
+            console.log(num);
+        }
+
+        $scope.deactiveate = function (num) {
+            if(num === 1) {
+                $scope.OSC1.active = false;
+                Synth.deactiveateOSC1();
+            } else {
+                $scope.OSC2.active = false;
+                Synth.deactiveateOSC2();
+            }
+            console.log(num);
+        }
+
+
+
+        $scope.FLT1 = {
+            number: 1,
+            type: "lowpass",
+            freq: 200
+        }
+        $scope.FLT2 = {
+            number: 2,
+            type: "lowpass",
+            freq: 200
+        }
+
+
+
+
+
 
         devices
             .connect()
@@ -547,7 +758,27 @@ angular
             });
 
         $scope.$watch('activeDevice', DSP.plug);
-        // $scope.$watch('detune', Synth.detuune);
+        $scope.$watch('detune', Synth.detuune);
+
+        $scope.$watch('OSC1.attack', Synth.changeAttack);
+        $scope.$watch('OSC1.decay', Synth.changeDecay);
+        $scope.$watch('OSC1.sustain', Synth.changeSustain);
+        $scope.$watch('OSC1.release', Synth.changeRelease);
+        $scope.$watch('OSC1.wavForm', Synth.changeWavForm);
+        
+        $scope.$watch('OSC2.attack', Synth.changeAttack2);
+        $scope.$watch('OSC2.decay', Synth.changeDecay2);
+        $scope.$watch('OSC2.sustain', Synth.changeSustain2);
+        $scope.$watch('OSC2.release', Synth.changeRelease2);
+        $scope.$watch('OSC2.wavForm', Synth.changeWavForm2);
+
+        $scope.$watch('FLT1.type', Synth.changeFilt1Type);
+        $scope.$watch('FLT1.freq', Synth.changeFilt1Freq);
+        $scope.$watch('FLT2.type', Synth.changeFilt2Type);
+        $scope.$watch('FLT2.freq', Synth.changeFilt2Freq);
+
+        // $scope.$watch('theFilt.type', Synth.changeFiltType);
+        // $scope.$watch('theFilt.freq', Synth.changeFiltFreq);
     }]);
 
 Tone.Transport.start();
