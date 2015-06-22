@@ -1,0 +1,9 @@
+* {
+	box-sizing:border-box;
+}
+
+.quarter {
+	width:25%;
+	padding:10px;
+	float:left;
+}
