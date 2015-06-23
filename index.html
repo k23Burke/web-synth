@@ -9,6 +9,10 @@
 	<!-- <meta name="author" content="SitePoint"> -->
     <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/0.9.4/angular-material.min.css">
     <link rel="stylesheet" href="css/main.css">
+    <!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+	<!-- Optional theme -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
 </head>
 
 <body>
@@ -22,13 +26,13 @@
 			</div>
 
 			<div class="full">
-				<div class="quarter osc1">
-					<h1>{{OSC1.number}}</h1>
+				<div class="quarter osc1" ng-class="{notActive:!OSC1.active}">
+					<h1>Oscillator {{OSC1.number}}</h1>
 					<div>
 						<select ng-model="OSC1.wavForm" ng-options="wav for wav in wavForms">
 						</select>
-						<button ng-click="activate(1)" ng-hide="OSC1.active">Activate</button>
-						<button ng-click="deactiveate(1)" ng-show="OSC1.active">Deactiveate</button>
+						<button ng-click="activate(1)" ng-hide="OSC1.active" type="button" class="btn btn-default">Activate</button>
+						<button ng-click="deactiveate(1)" ng-show="OSC1.active" type="button" class="btn btn-default">Deactiveate</button>
 					</div>
 					<h6>Attack - {{OSC1.attack / 1000}} seconds</h6>
 					<md-slider flex min="0" max="10000" ng-model="OSC1.attack" aria-label="red" id="red-slider"></md-slider>
@@ -41,13 +45,13 @@
 				</div>
 
 
-				<div class="quarter osc2">
-					<h1>{{OSC2.number}}</h1>
+				<div class="quarter osc2" ng-class="{notActive:!OSC2.active}">
+					<h1>Oscillator {{OSC2.number}}</h1>
 					<div>
 						<select ng-model="OSC2.wavForm" ng-options="wav for wav in wavForms">
 						</select>
-						<button ng-click="activate(2)" ng-hide="OSC2.active">Activate</button>
-						<button ng-click="deactiveate(2)" ng-show="OSC2.active">Deactiveate</button>
+						<button ng-click="activate(2)" ng-hide="OSC2.active" type="button" class="btn btn-default">Activate</button>
+						<button ng-click="deactiveate(2)" ng-show="OSC2.active" type="button" class="btn btn-default">Deactiveate</button>
 					</div>
 					<h6>Attack - {{OSC2.attack / 1000}} seconds</h6>
 					<md-slider flex min="0" max="10000" ng-model="OSC2.attack" aria-label="blue" id="blue-slider" class="md-primary"></md-slider>
@@ -61,37 +65,27 @@
 
 				<!--ng-change="wavChange(filter.name)" -->
 
-				<div class="quarter-no-pad">
-					<div class="osc1">
-						<h1>{{FLT1.number}}</h1>
+				<div class="quarter osc1" ng-class="{notActive:!OSC1.active}">
+					<div>
+						<h1>Filter {{FLT1.number}}</h1>
 						<div>
-							{{FLT1.type}}
 							<select ng-model="FLT1.type" ng-options="filter for filter in filterTypes">
+							</select>
+
+							<select ng-model="FLT1.roll" ng-options="roll for roll in filterRolloff">
 							</select>
 						</div>
 						<h6>{{FLT1.freq}}</h6>
 						<md-slider flex min="0" max="2000" ng-model="FLT1.freq" aria-label="blue" id="blue-slider"></md-slider>
 					</div>
-
-					<div class="osc2">
-						<h1>{{FLT2.number}}</h1>
+					<hr>
+					<div>
+						<h1>LFO</h1>
 						<div>
-							{{FLT2.type}}
-							<select ng-model="FLT2.type" ng-options="filter for filter in filterTypes">
-							</select>
-						</div>
-
-						<h6>{{FLT2.freq}}</h6>
-						<md-slider flex min="40" max="2000" ng-model="FLT2.freq" aria-label="blue" id="blue-slider" class="md-primary"></md-slider>
-					</div>
-				</div>
-
-				<div class="quarter-no-pad">
-					<div class="osc1">
-						<h1>{{LFO1.number}} LFO</h1>
-						<div>
+							<h6 class="label">Modulation Type: </h6>
 							<select ng-model="LFO1.type" ng-options="type for type in lfoForms">
-							</select>
+							</select><br/>
+							<h6 class="label">Rate:</h6>
 							<select ng-model="LFO1.rate" ng-options="rate for rate in lfoRates">
 							</select>
 						</div>
@@ -100,12 +94,31 @@
 							<md-slider flex min="0" max="1000" ng-model="LFO1.dist" aria-label="blue" id="blue-slider"></md-slider>
 						</div>
 					</div>
+				</div>
 
-					<div class="osc2">
-						<h1>{{LFO2.number}} LFO</h1>
+				<div class="quarter osc2" ng-class="{notActive:!OSC2.active}">
+
+					<div class="">
+						<h1>Filter</h1>
 						<div>
-							<select ng-model="LFO2.type" ng-options="type for type in lfoForms">
+							<select ng-model="FLT2.type" ng-options="filter for filter in filterTypes">
 							</select>
+
+							<select ng-model="FLT2.roll" ng-options="roll for roll in filterRolloff">
+							</select>
+						</div>
+
+						<h6>{{FLT2.freq}}</h6>
+						<md-slider flex min="40" max="2000" ng-model="FLT2.freq" aria-label="blue" id="blue-slider" class="md-primary"></md-slider>
+					</div>
+					<hr>
+					<div class="">
+						<h1>LFO</h1>
+						<div>
+							<h6 class="label">Modulation Type:</h6>
+							<select ng-model="LFO2.type" ng-options="type for type in lfoForms">
+							</select><br/>
+							<h6 class="label">Rate:</h6>
 							<select ng-model="LFO2.rate" ng-options="rate for rate in lfoRates">
 							</select>
 						</div>
@@ -177,12 +190,5 @@
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular-aria.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angular_material/0.10.0/angular-material.min.js"></script>
 	<script src="js/midiscratch.js"></script>
-	<!-- // <script src="js/poly.js"></script> -->
-	<!-- // <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script> -->
-	<!-- // <script src="js/polyKeys.js"></script> -->
-    
-    <!-- // <script src="/angular-ui-router/release/angular-ui-router.js"></script> -->
-    <!-- // <script src="/angular-bootstrap/dist/ui-bootstrap.js"></script> -->
-    <!-- // <script src="/socket.io-client/socket.io.js"></script> -->
 </body>
 </html>

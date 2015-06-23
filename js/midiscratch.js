@@ -342,9 +342,6 @@ angular
         syn[0].volume.connect(filt);
         syn[1].volume.connect(filt2);
 
-        console.log("FILTER 1 FREQ VALUE", filt.frequency.value);
-        console.log("FILTER 2 FREQ VALUE", filt2.frequency.value);
-
         // var lfo1FLT = new Tone.Filter(1600, 'allpass');
         // filt.connect(lfo1FLT);
         var lfo1 = new Tone.LFO("4m", 100, 600);
@@ -572,7 +569,12 @@ angular
                 filt.type = type;
             }
             function changeFilt1Freq (freq) {
+                console.log('HERE', freq)
+                console.log('HERE', filt.frequency.value)
                 filt.frequency.value = freq;
+            }
+            function changeFilt1Roll(amount) {
+                filt.rolloff = amount;
             }
 
         //FLT 2
@@ -580,7 +582,12 @@ angular
                 filt2.type = type;
             }
             function changeFilt2Freq (freq) {
+                console.log('HERE', freq)
+                console.log('HERE', filt2.frequency.value)
                 filt2.frequency.value = freq;
+            }
+            function changeFilt2Roll(amount) {
+                filt2.rolloff = amount;
             }
 
         //LFO 1
@@ -645,7 +652,12 @@ angular
             }
 
             function changeBCWet(amount) {
-                bit.wet.value = amount / 1000;
+                bit.wet.value = amount;
+            }
+
+        //PHASER
+            function changePhaserFreq(freq) {
+
             }
 
         return {
@@ -675,9 +687,11 @@ angular
 
             changeFilt1Freq: changeFilt1Freq,
             changeFilt1Type: changeFilt1Type,
+            changeFilt1Roll: changeFilt1Roll,
 
             changeFilt2Freq: changeFilt2Freq,
             changeFilt2Type: changeFilt2Type,
+            changeFilt2Roll: changeFilt2Roll,
 
             activeateOSC1: activeateOSC1,
             deactiveateOSC1: deactiveateOSC1,
@@ -751,6 +765,7 @@ angular
         var osc2 = oscArray[1];
 
         $scope.wavForms = ['sine','square','triangle','sawtooth', 'pulse', 'pwm'];
+        $scope.filterRolloff = [-12, -24, -48];
         $scope.filterTypes = ["lowpass", "highpass", "bandpass", "lowshelf", "highshelf", "notch", "allpass", "peaking"];
         $scope.lfoRates = ["8m","4m","2m","1m","2n","3n","4n","8n","12n","16n"];
         $scope.lfoForms = ['sine','square','triangle','sawtooth'];
@@ -809,11 +824,13 @@ angular
         $scope.FLT1 = {
             number: 1,
             type: "lowpass",
+            rolloff: -12,
             freq: 200
         }
         $scope.FLT2 = {
             number: 2,
             type: "lowpass",
+            rolloff: -12,
             freq: 200
         }
 
@@ -898,8 +915,12 @@ angular
 
         $scope.$watch('FLT1.type', Synth.changeFilt1Type);
         $scope.$watch('FLT1.freq', Synth.changeFilt1Freq);
+        $scope.$watch('FLT1.roll', Synth.changeFilt1Roll);
+
         $scope.$watch('FLT2.type', Synth.changeFilt2Type);
         $scope.$watch('FLT2.freq', Synth.changeFilt2Freq);
+        $scope.$watch('FLT2.roll', Synth.changeFilt2Roll);
+
 
         $scope.$watch('LFO1.type', Synth.changeLFO1Type);
         $scope.$watch('LFO1.dist', Synth.changeLFO1Depth);

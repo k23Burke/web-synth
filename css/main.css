@@ -6,11 +6,16 @@
 	width:25%;
 	padding:10px;
 	float:left;
+	min-height:435px;
 }
-
-.quarter-no-pad {
-	width:25%;
-	float:left;
+.quarter.notActive {
+	background-color: #000;
+	opacity:0.2;
+}
+button.btn {
+	background:none;
+	padding:0px 12px;
+	margin-left:5px;
 }
 .osc1 {
 	background-color: #FFBFB2;
@@ -22,4 +27,14 @@
 .full {
 	float:left;
 	width:100%;
+}
+
+h1, h6 {
+	text-align: center;
+}
+
+h6.label {
+	text-align: left;
+	display: inline-block;
+	color:#333;
 }
