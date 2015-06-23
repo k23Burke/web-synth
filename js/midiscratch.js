@@ -145,7 +145,7 @@ angular
             // console.log("LFO", lfo.max);
 
             if(this.active) {
-                console.log("THIS", this.active)
+                // console.log("THIS", this.active)
                 var keyObj = {};
                 keyObj[midiKey] = {
                     main: this.createKeyOsc(),
@@ -355,15 +355,25 @@ angular
         lfo2.connect(filt2.frequency);
         lfo2.sync();
 
-        // var lfo2FLT = new Tone.Filter(1600, 'allpass');
-        // filt2.connect(lfo2FLT);
-        // var lfo2 = new Tone.LFO("2n", 100, 1000);
-        // lfo2.connect(lfo2FLT.frequency);
-        // lfo2.sync();
+        var ppdelay = new Tone.PingPongDelay("8n", 0);
+        ppdelay.wet.value = 0.2;
+        filt.connect(ppdelay);
+        filt2.connect(ppdelay);
+
+        var chorus = new Tone.Chorus(2, 3.5, 0.7);
+        ppdelay.connect(chorus);
 
 
-        filt.toMaster();
-        filt2.toMaster();
+        var bit = new Tone.BitCrusher(1);
+        chorus.connect(bit);
+        bit.toMaster();
+        // ppdelay.toMaster();
+
+
+        // filt.toMaster();
+        // filt2.toMaster();
+
+
         // lfo1FLT.toMaster();
         // lfo2FLT.toMaster();
 
@@ -601,6 +611,43 @@ angular
                 lfo2.frequency.value = rate;
             }
 
+
+        //PP DELAY
+            function changePPTime(time) {
+                ppdelay.delayTime.value = time;
+            }
+            function changePPFeedback(amount) {
+                if(amount === 0) {
+                    ppdelay.wet.value = 0;
+                } else {
+                    ppdelay.wet.value = 0.2;
+                }
+                ppdelay.feedback.value = amount/1000;
+            }
+
+        //CHORUS
+            function changeChorFreq(freq) {
+                chorus.frequency.value = freq;
+            }
+            function changeChorDelayTime(time) {
+                chorus.delayTime = time / 100;
+            }
+            function changeChorDepth(depth) {
+                chorus.depth = depth / 1000;
+            }
+            function changeChorWetness(amount) {
+                chorus.wet = amount / 1000;
+            }
+
+        //BITCRUSHER
+            function changeBCBits(bits) {
+                bit.bits = bits;
+            }
+
+            function changeBCWet(amount) {
+                bit.wet.value = amount / 1000;
+            }
+
         return {
             init: function() {
                 _createContext();
@@ -646,6 +693,16 @@ angular
             changeLFO2Depth: changeLFO2Depth,
             changeLFO2Rate: changeLFO2Rate,
 
+            changePPTime: changePPTime,
+            changePPFeedback: changePPFeedback,
+
+            changeChorFreq: changeChorFreq,
+            changeChorDelayTime: changeChorDelayTime,
+            changeChorDepth: changeChorDepth,
+            changeChorWetness: changeChorWetness,
+
+            changeBCBits: changeBCBits,
+            changeBCWet: changeBCWet,
 
             wire: _wire,
             noteOn: _noteOn,
@@ -775,6 +832,24 @@ angular
         }
 
 
+        $scope.PPD = {
+            feedback: 0,
+            time: "4n"
+        }
+
+
+        $scope.CHR = {
+            frequency: 0,
+            time: 0,
+            depth: 0,
+            wet: 0
+        }
+
+        $scope.BTC = {
+            bit: 1,
+            wet: 0
+        }
+
 
 
 
@@ -833,6 +908,17 @@ angular
         $scope.$watch('LFO2.dist', Synth.changeLFO2Depth);
         $scope.$watch('LFO2.rate', Synth.changeLFO2Rate);
 
+        $scope.$watch('PPD.time', Synth.changePPTime);
+        $scope.$watch('PPD.feedback', Synth.changePPFeedback);
+
+
+        $scope.$watch('CHR.wet', Synth.changeChorWetness);
+        $scope.$watch('CHR.frequency', Synth.changeChorFreq);
+        $scope.$watch('CHR.depth', Synth.changeChorDepth);
+        $scope.$watch('CHR.time', Synth.changeChorDelayTime);
+
+        $scope.$watch('BTC.bit', Synth.changeBCBits);
+        $scope.$watch('BTC.wet', Synth.changeBCWet);
     }]);
 
 

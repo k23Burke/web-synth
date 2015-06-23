@@ -7,3 +7,19 @@
 	padding:10px;
 	float:left;
 }
+
+.quarter-no-pad {
+	width:25%;
+	float:left;
+}
+.osc1 {
+	background-color: #FFBFB2;
+}
+.osc2 {
+	background-color: #EEF8FF;
+}
+
+.full {
+	float:left;
+	width:100%;
+}
