@@ -149,18 +149,18 @@ angular
                 var keyObj = {};
                 keyObj[midiKey] = {
                     main: this.createKeyOsc(),
-                    sub: this.createKeyOsc()
+                    // sub: this.createKeyOsc()
                 }
-                keyObj[midiKey].sub.volume.value = this.subVolume;
+                // keyObj[midiKey].sub.volume.value = this.subVolume;
                 this.keys.push(keyObj);
                 var keyPlayed = this.midiToKey(midiKey);
                 keyObj[midiKey].main.triggerAttack(keyPlayed);
                 var oct = parseInt(keyPlayed.substr(keyPlayed.length-1, 1)) - 1;
-                if(oct !== 0) {
-                    keyObj[midiKey].sub.triggerAttack(keyPlayed.substr(0,keyPlayed.length-1) + oct.toString());
-                } else {
-                    keyObj[midiKey].sub.triggerAttack(keyPlayed);
-                }
+                // if(oct !== 0) {
+                //     keyObj[midiKey].sub.triggerAttack(keyPlayed.substr(0,keyPlayed.length-1) + oct.toString());
+                // } else {
+                //     keyObj[midiKey].sub.triggerAttack(keyPlayed);
+                // }
             }
         }
         Oscillator.prototype.createKeyOsc = function() {
@@ -190,15 +190,14 @@ angular
             var self = this;
             this.keys = this.keys.filter(function (keyObj) {
                 if(keyObj.hasOwnProperty(midiKey)) {
-                    // console.log('rELEASE TIME', self.release/1000)
                     keyObj[midiKey].main.triggerEnvelopeRelease(self.release/1000);
-                    keyObj[midiKey].sub.triggerEnvelopeRelease(self.release/1000);
+                    // keyObj[midiKey].sub.triggerEnvelopeRelease(self.release/1000);
 
                     var interval = window.setInterval( function() {
 
                         //dispose of both main and sub
                         keyObj[midiKey].main.dispose();
-                        keyObj[midiKey].sub.dispose();
+                        // keyObj[midiKey].sub.dispose();
                         window.clearInterval(interval);
 
                     }, self.release);
