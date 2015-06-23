@@ -136,7 +136,6 @@
 
 					<h1>PingPong Delay</h1>
 					<div>
-						<h6>{{PPD.feedback / 1000}}</h6>
 						<md-slider flex min="0" max="1000" ng-model="PPD.feedback" aria-label="blue" id="blue-slider"></md-slider>
 					</div>
 						{{PPD.time}}
@@ -175,6 +174,27 @@
 					<div>
 						<h6>WETNESS {{BTC.wet}}</h6>
 						<md-slider flex min="0" max="1000" ng-model="BTC.wet" aria-label="blue" id="blue-slider"></md-slider>
+					</div>
+				</div>
+
+				<div class="quarter">
+
+					<h1>Phase Effect</h1>
+					<div>
+						<h6>BASE {{PHS.base}}</h6>
+						<md-slider flex min="0" max="1000" ng-model="PHS.base" aria-label="blue" id="blue-slider"></md-slider>
+					</div>
+					<div>
+						<h6>FREQ {{PHS.freq}}</h6>
+						<md-slider flex min="0" max="1000" ng-model="PHS.freq" aria-label="blue" id="blue-slider"></md-slider>
+					</div>
+					<div>
+						<h6>DEPTH {{PHS.depth / 1000}}</h6>
+						<md-slider flex min="0" max="1000" ng-model="PHS.depth" aria-label="blue" id="blue-slider"></md-slider>
+					</div>
+					<div>
+						<h6>WETNESS {{PHS.wet / 1000}}</h6>
+						<md-slider flex min="0" max="1000" ng-model="PHS.wet" aria-label="blue" id="blue-slider"></md-slider>
 					</div>
 				</div>
 			</div>

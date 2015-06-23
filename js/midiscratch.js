@@ -363,7 +363,10 @@ angular
 
         var bit = new Tone.BitCrusher(1);
         chorus.connect(bit);
-        bit.toMaster();
+
+        var phase = new Tone.Phaser(0.5, 10, 400);
+        bit.connect(phase);
+        phase.toMaster();
         // ppdelay.toMaster();
 
 
@@ -657,7 +660,16 @@ angular
 
         //PHASER
             function changePhaserFreq(freq) {
-
+                phase.frequency.value = freq;
+            }
+            function changePhaserDepth(depth) {
+                phase.depth = depth / 1000;
+            }
+            function changePhaserBase(freq) {
+                phase.baseFrequency = freq;
+            }
+            function changePhaserWet(amount) {
+                phase.wet = amount /1000;
             }
 
         return {
@@ -718,6 +730,12 @@ angular
             changeBCBits: changeBCBits,
             changeBCWet: changeBCWet,
 
+
+            changePhaserFreq: changePhaserFreq,
+            changePhaserDepth: changePhaserDepth,
+            changePhaserBase: changePhaserBase,
+            changePhaserWet: changePhaserWet,
+
             wire: _wire,
             noteOn: _noteOn,
             noteOff: _noteOff,
@@ -765,7 +783,7 @@ angular
         var osc2 = oscArray[1];
 
         $scope.wavForms = ['sine','square','triangle','sawtooth', 'pulse', 'pwm'];
-        $scope.filterRolloff = [-12, -24, -48];
+        $scope.filterRolloff = ['-12', '-24', '-48'];
         $scope.filterTypes = ["lowpass", "highpass", "bandpass", "lowshelf", "highshelf", "notch", "allpass", "peaking"];
         $scope.lfoRates = ["8m","4m","2m","1m","2n","3n","4n","8n","12n","16n"];
         $scope.lfoForms = ['sine','square','triangle','sawtooth'];
@@ -824,13 +842,13 @@ angular
         $scope.FLT1 = {
             number: 1,
             type: "lowpass",
-            rolloff: -12,
+            rolloff: '-12',
             freq: 200
         }
         $scope.FLT2 = {
             number: 2,
             type: "lowpass",
-            rolloff: -12,
+            rolloff: '-12',
             freq: 200
         }
 
@@ -864,6 +882,13 @@ angular
 
         $scope.BTC = {
             bit: 1,
+            wet: 0
+        }
+
+        $scope.PHS = {
+            base: 400,
+            freq: 0.5,
+            depth: 10,
             wet: 0
         }
 
@@ -940,6 +965,13 @@ angular
 
         $scope.$watch('BTC.bit', Synth.changeBCBits);
         $scope.$watch('BTC.wet', Synth.changeBCWet);
+
+
+        $scope.$watch('PHS.freq', Synth.changePhaserFreq);
+        $scope.$watch('PHS.depth', Synth.changePhaserDepth);
+        $scope.$watch('PHS.base', Synth.changePhaserBase);
+        $scope.$watch('PHS.wet', Synth.changePhaserWet);
+
     }]);
 
 
