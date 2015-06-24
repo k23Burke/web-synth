@@ -140,32 +140,29 @@ angular
             return this;
         }
         Oscillator.prototype.createNote = function(midiKey, lfo) {
-            // console.log("LFO", lfo);
-            // console.log("LFO min", lfo.min);
-            // console.log("LFO", lfo.max);
 
             if(this.active) {
-                // console.log("THIS", this.active)
                 var keyObj = {};
                 keyObj[midiKey] = {
-                    main: this.createKeyOsc(),
-                    // sub: this.createKeyOsc()
+                    main: this.createKeyOsc()
                 }
-                // keyObj[midiKey].sub.volume.value = this.subVolume;
                 this.keys.push(keyObj);
                 var keyPlayed = this.midiToKey(midiKey);
                 keyObj[midiKey].main.triggerAttack(keyPlayed);
                 var oct = parseInt(keyPlayed.substr(keyPlayed.length-1, 1)) - 1;
-                // if(oct !== 0) {
-                //     keyObj[midiKey].sub.triggerAttack(keyPlayed.substr(0,keyPlayed.length-1) + oct.toString());
-                // } else {
-                //     keyObj[midiKey].sub.triggerAttack(keyPlayed);
-                // }
+                if(this.subVolume !== -50) {
+                    keyObj[midiKey].sub = this.createKeyOsc()
+                    keyObj[midiKey].sub.volume.value = this.subVolume;
+                    if(oct !== 0) {
+                        keyObj[midiKey].sub.triggerAttack(keyPlayed.substr(0,keyPlayed.length-1) + oct.toString());
+                    } else {
+                        keyObj[midiKey].sub.triggerAttack(keyPlayed);
+                    }
+                }
             }
         }
         Oscillator.prototype.createKeyOsc = function() {
             var key = new Tone.MonoSynth();
-
             key.envelope.attack = this.attack/1000;
             key.envelope.decay = this.decay/1000;
             key.envelope.sustain = this.sustain/1000;
@@ -174,7 +171,6 @@ angular
             key.detune.value = this.detune;
             key.filter.type  = this.filterType;
             key.filter.frequency.value  = this.filterFreq;
-
             key.chain(this.volume);
 
             return key;
@@ -191,13 +187,17 @@ angular
             this.keys = this.keys.filter(function (keyObj) {
                 if(keyObj.hasOwnProperty(midiKey)) {
                     keyObj[midiKey].main.triggerEnvelopeRelease(self.release/1000);
-                    // keyObj[midiKey].sub.triggerEnvelopeRelease(self.release/1000);
-
+                    if(keyObj[midiKey].sub) {
+                        keyObj[midiKey].sub.triggerEnvelopeRelease(self.release/1000);
+                    }
                     var interval = window.setInterval( function() {
 
                         //dispose of both main and sub
                         keyObj[midiKey].main.dispose();
-                        // keyObj[midiKey].sub.dispose();
+                        if(keyObj[midiKey].sub) {
+                            keyObj[midiKey].sub.dispose();
+                        }
+
                         window.clearInterval(interval);
 
                     }, self.release);
@@ -207,14 +207,14 @@ angular
                 else return true;
             });
         }
-        Oscillator.prototype.changeDetune = function(value) {
-            console.log('DETUNEING', value/100);
-            this.keys.forEach(function (key) {
-                console.log(key);
-                key.main.detune.value = value/100;
-                key.sub.detune.value = value/100;
-            })
-        }
+        // Oscillator.prototype.changeDetune = function(value) {
+        //     console.log('DETUNEING', value/100);
+        //     this.keys.forEach(function (key) {
+        //         console.log(key);
+        //         key.main.detune.value = value/100;
+        //         key.sub.detune.value = value/100;
+        //     })
+        // }
         // Oscillator.prototype.changeAttack = function(value) {
         //     this.attack = value/1000;
         // }
@@ -523,9 +523,14 @@ angular
                 syn[0].active = false;
             }
             function changeWavForm(wavForm) {
-                syn.forEach(function (osc) {
-                    osc.wavForm = wavForm;
-                })
+                // syn.forEach(function (osc) {
+                //     osc.wavForm = wavForm;
+                // })
+                syn[0].wavForm = wavForm;
+            }
+            function changeSubBass(volume) {
+                syn[0].subVolume = volume - 50;
+                console.log(syn[0].subVolume);
             }
             function changeAttack(value) {
                 syn[0].attack = value;
@@ -548,9 +553,14 @@ angular
                 syn[1].active = false;
             }
             function changeWavForm2(wavForm) {
-                syn.forEach(function (osc) {
-                    osc.wavForm = wavForm;
-                })
+                // syn.forEach(function (osc) {
+                //     osc.wavForm = wavForm;
+                // })
+                syn[1].wavForm = wavForm;
+            }
+            function changeSubBass2(volume) {
+                syn[1].subVolume = volume - 50;
+                console.log(syn[1].subVolume);
             }
             function changeAttack2(value) {
                 syn[1].attack = value;
@@ -689,12 +699,14 @@ angular
             changeSustain: changeSustain,
             changeRelease: changeRelease,
             changeWavForm: changeWavForm,
+            changeSubBass: changeSubBass,
 
             changeAttack2: changeAttack2,
             changeDecay2: changeDecay2,
             changeSustain2: changeSustain2,
             changeRelease2: changeRelease2,
             changeWavForm2: changeWavForm2,
+            changeSubBass2: changeSubBass2,
 
             changeFilt1Freq: changeFilt1Freq,
             changeFilt1Type: changeFilt1Type,
@@ -790,6 +802,7 @@ angular
             number: 1,
             active: osc.active,
             wavForm: osc.wavForm,
+            sub: 0,
 
             attack: osc.attack,
             decay: osc.decay,
@@ -804,6 +817,7 @@ angular
             number: 2,
             active: osc2.active,
             wavForm: osc2.wavForm,
+            sub: 0,
 
             attack: osc2.attack,
             decay: osc2.decay,
@@ -930,12 +944,14 @@ angular
         $scope.$watch('OSC1.sustain', Synth.changeSustain);
         $scope.$watch('OSC1.release', Synth.changeRelease);
         $scope.$watch('OSC1.wavForm', Synth.changeWavForm);
+        $scope.$watch('OSC1.sub', Synth.changeSubBass);
         
         $scope.$watch('OSC2.attack', Synth.changeAttack2);
         $scope.$watch('OSC2.decay', Synth.changeDecay2);
         $scope.$watch('OSC2.sustain', Synth.changeSustain2);
         $scope.$watch('OSC2.release', Synth.changeRelease2);
         $scope.$watch('OSC2.wavForm', Synth.changeWavForm2);
+        $scope.$watch('OSC2.sub', Synth.changeSubBass2);
 
         $scope.$watch('FLT1.type', Synth.changeFilt1Type);
         $scope.$watch('FLT1.freq', Synth.changeFilt1Freq);

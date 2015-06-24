@@ -4,7 +4,7 @@
 <head>
 	<meta charset="utf-8">
 
-	<title>The HTML5 Herald</title>
+	<title>Web Synth by Kyle Burke</title>
 	<meta name="description" content="WebSynth">
 	<!-- <meta name="author" content="SitePoint"> -->
     <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/0.9.4/angular-material.min.css">
@@ -34,6 +34,8 @@
 						<button ng-click="activate(1)" ng-hide="OSC1.active" type="button" class="btn btn-default">Activate</button>
 						<button ng-click="deactiveate(1)" ng-show="OSC1.active" type="button" class="btn btn-default">Deactiveate</button>
 					</div>
+					<h6>Sub Bass - {{OSC1.sub - 50}} seconds</h6>
+					<md-slider flex min="0" max="50" ng-model="OSC1.sub" aria-label="red" id="red-slider"></md-slider>
 					<h6>Attack - {{OSC1.attack / 1000}} seconds</h6>
 					<md-slider flex min="0" max="10000" ng-model="OSC1.attack" aria-label="red" id="red-slider"></md-slider>
 					<h6>Decay - {{OSC1.decay / 1000}} seconds</h6>
@@ -53,6 +55,8 @@
 						<button ng-click="activate(2)" ng-hide="OSC2.active" type="button" class="btn btn-default">Activate</button>
 						<button ng-click="deactiveate(2)" ng-show="OSC2.active" type="button" class="btn btn-default">Deactiveate</button>
 					</div>
+					<h6>Sub Bass - {{OSC2.sub - 50}} seconds</h6>
+					<md-slider flex min="0" max="50" ng-model="OSC2.sub" aria-label="blue" id="blue-slider" class="md-primary"></md-slider>
 					<h6>Attack - {{OSC2.attack / 1000}} seconds</h6>
 					<md-slider flex min="0" max="10000" ng-model="OSC2.attack" aria-label="blue" id="blue-slider" class="md-primary"></md-slider>
 					<h6>Decay - {{OSC2.decay / 1000}} seconds</h6>
