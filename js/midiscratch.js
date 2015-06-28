@@ -14,15 +14,14 @@ angular
             connect: _connect
         };
     }]);
-//WHERE THE onMidi Trigger happens
 angular
-    .module('Synth', ['WebAudio'])//, 'WebAnalyser'])
-    .factory('DSP', ['AudioEngine', function(Engine) { // 'Analyser', function(Engine, Analyser) {
+    .module('Synth', ['WebAudio'])
+    .factory('DSP', ['AudioEngine', function(Engine) {
         var self = this;
         self.device = null;
         self.analyser = null;
 
-        Engine.init();
+        // Engine.init();
 
         function _unplug() {
             self.device.onmidimessage = null;
@@ -30,7 +29,6 @@ angular
         }
 
         function _plug(device) {
-            // console.log('ON Plugin');
             if(device) {
                 // unplug any already connected device
                 if(self.device) {
@@ -41,14 +39,6 @@ angular
                 self.device.onmidimessage = _onmidimessage;
             }
         }
-
-        // function _createAnalyser(canvas) {
-        //     self.analyser = new Analyser(canvas);
-        //     Engine.wire(self.analyser);
-
-        //     return self.analyser;
-        // }
-
         function _onmidimessage(e) {
             /**
             * e.data is an array
@@ -59,12 +49,9 @@ angular
 
             switch(e.data[0]) {
                 case 144:
-                    // console.log('HIT NOTE', e.data[1]);
                     Engine.noteOn(e.data[1], e.data[2]);
-                    // keyGen(e.data[1], e.data[2])
                 break;
                 case 128:
-                    // console.log('RELEASE NOTE', e.data[1]);
                     Engine.noteOff(e.data[1]);
                 break;
                 case 224:
@@ -74,27 +61,9 @@ angular
 
         }
 
-        function _enableFilter(enable) {
-            if(enable !== undefined) {
-                if(enable) {
-                    Engine.filter.connect();
-                } else {
-                    Engine.filter.disconnect();
-                }
-            }
-        }
-
         return {
             getAllOscillators: Engine.getAllOscillators,
-            plug: _plug,
-            // createAnalyser: _createAnalyser,
-            setOscType: Engine.osc.setType,
-            setFilterType: Engine.filter.setType,
-            setAttack: Engine.setAttack,
-            setRelease: Engine.setRelease,
-            setFilterFrequency: Engine.filter.setFrequency,
-            setFilterResonance: Engine.filter.setResonance,
-            enableFilter: _enableFilter
+            plug: _plug
         };
     }]);
 
@@ -163,6 +132,7 @@ angular
         }
         Oscillator.prototype.createKeyOsc = function() {
             var key = new Tone.MonoSynth();
+            console.log('MONO', key)
             key.envelope.attack = this.attack/1000;
             key.envelope.decay = this.decay/1000;
             key.envelope.sustain = this.sustain/1000;
@@ -207,17 +177,6 @@ angular
                 else return true;
             });
         }
-        // Oscillator.prototype.changeDetune = function(value) {
-        //     console.log('DETUNEING', value/100);
-        //     this.keys.forEach(function (key) {
-        //         console.log(key);
-        //         key.main.detune.value = value/100;
-        //         key.sub.detune.value = value/100;
-        //     })
-        // }
-        // Oscillator.prototype.changeAttack = function(value) {
-        //     this.attack = value/1000;
-        // }
         Oscillator.prototype.changeWavForm = function(wavForm) {
             this.wavForm = wavForm;
         }
@@ -227,113 +186,7 @@ angular
 
         return Oscillator;
     })
-    .service('AMP', function() {
-        var self;
-
-        function Gain(ctx) {
-            self = this;
-
-            self.gain = ctx.createGain();
-
-            return self;
-        }
-
-        Gain.prototype.setVolume = function(volume, time) {
-            self.gain.gain.setTargetAtTime(volume, 0, time);
-        }
-
-        Gain.prototype.connect = function(i) {
-            self.gain.connect(i);
-        }
-
-        Gain.prototype.cancel = function() {
-            self.gain.gain.cancelScheduledValues(0);
-        }
-
-        Gain.prototype.disconnect = function() {
-            self.gain.disconnect(0);
-        }
-
-        return Gain;
-    })
-    .service('OSC', function() {
-        var self;
-
-        function Oscillator(ctx) {
-            self = this;
-            self.osc = ctx.createOscillator();
-
-            return self;
-        }
-
-        Oscillator.prototype.setOscType = function(type) {
-            if(type) {
-                self.osc.type = type
-            }
-        }
-
-        Oscillator.prototype.setFrequency = function(freq, time) {
-            self.osc.frequency.setTargetAtTime(freq, 0, time);
-        };
-
-        Oscillator.prototype.start = function(pos) {
-            self.osc.start(pos);
-        }
-
-        Oscillator.prototype.stop = function(pos) {
-            self.osc.stop(pos);
-        }
-
-        Oscillator.prototype.connect = function(i) {
-            self.osc.connect(i);
-        }
-
-        Oscillator.prototype.cancel = function() {
-            self.osc.frequency.cancelScheduledValues(0);
-        }
-
-        return Oscillator;
-    })
-    .service('FTR', function() {
-        var self;
-
-        function Filter(ctx) {
-            self = this;
-
-            self.filter = ctx.createBiquadFilter();
-
-            return self;
-        }
-
-        Filter.prototype.setFilterType = function(type) {
-            if(type) {
-                self.filter.type = type;
-            }
-        }
-
-        Filter.prototype.setFilterFrequency = function(freq) {
-            if(freq) {
-                self.filter.frequency.value = freq;
-            }
-        }
-
-        Filter.prototype.setFilterResonance = function(res) {
-            if(res) {
-                self.filter.Q.value = res;
-            }
-        }
-
-        Filter.prototype.connect = function(i) {
-            self.filter.connect(i);
-        }
-
-        Filter.prototype.disconnect = function() {
-            self.filter.disconnect(0);
-        }
-
-        return Filter;
-    })
-    .factory('AudioEngine', ['OSC', 'Oscill', 'AMP', 'FTR', 'Filt', '$window', function(Oscillator, Oscill, Amp, Filter, Filt, $window) {
+    .factory('AudioEngine', [ 'Oscill', 'Filt', '$window', function(Oscill, Filt, $window) {//['OSC', 'Oscill', 'AMP', 'FTR', 'Filt', '$window', function(Oscillator, Oscill, Amp, Filter, Filt, $window) {
         var syn = [new Oscill(), new Oscill()]
 
         var filt = new Tone.Filter(200, 'lowpass');
@@ -341,8 +194,6 @@ angular
         syn[0].volume.connect(filt);
         syn[1].volume.connect(filt2);
 
-        // var lfo1FLT = new Tone.Filter(1600, 'allpass');
-        // filt.connect(lfo1FLT);
         var lfo1 = new Tone.LFO("4m", 100, 600);
         lfo1.connect(filt.frequency);
         lfo1.sync();
@@ -366,22 +217,8 @@ angular
         var phase = new Tone.Phaser(0.5, 10, 400);
         bit.connect(phase);
         phase.toMaster();
-        // ppdelay.toMaster();
-
-
-        // filt.toMaster();
-        // filt2.toMaster();
-
-
-        // lfo1FLT.toMaster();
-        // lfo2FLT.toMaster();
 
         Tone.Transport.start();
-
-
-            // var lfo = new Tone.LFO("2n", 100, 1000);
-            // lfo.connect(filt.frequency);
-            // lfo.sync();
 
 
         syn[0].active = true;
@@ -401,108 +238,6 @@ angular
                 osc.releaseNote(note);
             });
         }
-        //OLD CODE
-            var self = this;
-            self.activeNotes = [];
-            self.settings = {
-                attack: 0.05,
-                release: 0.05,
-                portamento: 0.05
-            };
-
-            self.detuneAmount = 0;
-
-            self.currentFreq = null;
-
-            function _createContext() {
-                self.ctx = new $window.AudioContext();
-            }
-
-            function _createAmp() {
-                self.amp = new Amp(self.ctx);
-            }
-
-            function _createOscillators() {
-                //osc types: sine, square, triangle, sawtooth
-                // osc1
-                self.osc1 = new Oscillator(self.ctx);
-                self.osc1.setOscType('sine');
-            }
-
-            function _setAttack(a) {
-                if(a) {
-                    self.settings.attack = a / 1000;
-                }
-            }
-
-            function _setRelease(r) {
-                if(r) {
-                    self.settings.release = r / 1000;
-                }
-            }
-
-            function _createFilters() {
-                self.filter1 = new Filter(self.ctx);
-                self.filter1.setFilterFrequency(50);
-                self.filter1.setFilterResonance(0);
-            }
-
-            function _wire(Analyser) {
-                self.osc1.connect(self.amp.gain);
-
-                if(Analyser) {
-                    self.analyser = Analyser;
-                    self.analyser.connect(self.ctx, self.amp);
-                } else {
-                    self.amp.connect(self.ctx.destination);
-                }
-
-                self.amp.setVolume(0.0, 0); //mute the sound
-                self.osc1.start(0); // start osc1
-            }
-
-            function _connectFilter() {
-                self.amp.disconnect();
-                self.amp.connect(self.filter1.filter);
-                if(self.analyser) {
-                    self.analyser.connect(self.ctx, self.filter1);
-                } else {
-                    self.filter1.connect(self.ctx.destination);
-                }
-            }
-
-            function _disconnectFilter() {
-                self.filter1.disconnect();
-                self.amp.disconnect();
-                if(self.analyser) {
-                    self.analyser.connect(self.ctx, self.amp);
-                } else {
-                    self.amp.connect(self.ctx.destination);
-                }
-            }
-
-            function _mtof(note) {
-                return 440 * Math.pow(2, (note - 69) / 12);
-            }
-
-            function _vtov (velocity) {
-                return (velocity / 127).toFixed(2);
-            }
-
-
-            function _detune(d) {
-                if(self.currentFreq) {
-                    //64 = no detune
-                    if(64 === d) {
-                        self.osc1.setFrequency(self.currentFreq, self.settings.portamento);
-                        self.detuneAmount = 0;
-                    } else {
-                        var detuneFreq = Math.pow(2, 1 / 12) * (d - 64);
-                        self.osc1.setFrequency(self.currentFreq + detuneFreq, self.settings.portamento);
-                        self.detuneAmount = detuneFreq;
-                    }
-                }
-            }
 
         function getAllOscillators() {
             console.log('RETURNING ALL');
@@ -511,7 +246,7 @@ angular
 
         function changeDetune(value) {
             syn.forEach(function (osc) {
-                osc.changeDetune(value)
+                // osc.changeDetune(value)
             })
         }
 
@@ -523,14 +258,10 @@ angular
                 syn[0].active = false;
             }
             function changeWavForm(wavForm) {
-                // syn.forEach(function (osc) {
-                //     osc.wavForm = wavForm;
-                // })
                 syn[0].wavForm = wavForm;
             }
             function changeSubBass(volume) {
                 syn[0].subVolume = volume - 50;
-                console.log(syn[0].subVolume);
             }
             function changeAttack(value) {
                 syn[0].attack = value;
@@ -560,7 +291,6 @@ angular
             }
             function changeSubBass2(volume) {
                 syn[1].subVolume = volume - 50;
-                console.log(syn[1].subVolume);
             }
             function changeAttack2(value) {
                 syn[1].attack = value;
@@ -581,8 +311,6 @@ angular
                 filt.type = type;
             }
             function changeFilt1Freq (freq) {
-                console.log('HERE', freq)
-                console.log('HERE', filt.frequency.value)
                 filt.frequency.value = freq;
             }
             function changeFilt1Roll(amount) {
@@ -594,8 +322,6 @@ angular
                 filt2.type = type;
             }
             function changeFilt2Freq (freq) {
-                console.log('HERE', freq)
-                console.log('HERE', filt2.frequency.value)
                 filt2.frequency.value = freq;
             }
             function changeFilt2Roll(amount) {
@@ -608,7 +334,6 @@ angular
             }
             function changeLFO1Depth(num) {
                 var midFreq = filt.frequency.value;
-                console.log("MIDDLE", midFreq);
                 lfo1.min = midFreq - num;
                 lfo1.max = midFreq + num;
             }
@@ -622,7 +347,6 @@ angular
             }
             function changeLFO2Depth(num) {
                 var midFreq = filt2.frequency.value;
-                console.log("MIDDLE", midFreq);
                 lfo2.min = midFreq - num;
                 lfo2.max = midFreq + num;
             }
@@ -664,7 +388,7 @@ angular
             }
 
             function changeBCWet(amount) {
-                bit.wet.value = amount;
+                bit.wet.value = amount /1000;
             }
 
         //PHASER
@@ -682,12 +406,6 @@ angular
             }
 
         return {
-            init: function() {
-                _createContext();
-                _createAmp();
-                _createOscillators();
-                _createFilters();
-            },
 
 
 
@@ -747,38 +465,8 @@ angular
             changePhaserBase: changePhaserBase,
             changePhaserWet: changePhaserWet,
 
-            wire: _wire,
             noteOn: _noteOn,
             noteOff: _noteOff,
-            detune: _detune,
-            setAttack: _setAttack,
-            setRelease: _setRelease,
-            osc: {
-                setType: function(t) {
-                    if(self.osc1) {
-                        self.osc1.setOscType(t);
-                    }
-                }
-            },
-            filter: {
-                setType: function(t) {
-                    if(self.filter1) {
-                        self.filter1.setFilterType(t);
-                    }
-                },
-                setFrequency: function(f) {
-                    if(self.filter1) {
-                        self.filter1.setFilterFrequency(f);
-                    }
-                },
-                setResonance: function(r) {
-                    if(self.filter1) {
-                        self.filter1.setFilterResonance(r);
-                    }
-                },
-                connect: _connectFilter,
-                disconnect: _disconnectFilter
-            }
         };
     }]);
 
@@ -786,7 +474,7 @@ angular
 angular
     .module('DemoApp', ['WebMIDI', 'Synth'])
     .controller('AppCtrl', ['$scope', 'Devices', 'DSP', 'AudioEngine', function($scope, devices, DSP, Synth) {
-        console.log('Synth', Synth.getAllOscillators());
+        // console.log('Synth', Synth.getAllOscillators());
         $scope.devices = [];
         $scope.detune = 0;
         var oscArray = Synth.getAllOscillators();
@@ -836,7 +524,6 @@ angular
                 $scope.OSC2.active = true;
                 Synth.activeateOSC2();
             }
-            console.log(num);
         }
 
         $scope.deactiveate = function (num) {
@@ -847,7 +534,6 @@ angular
                 $scope.OSC2.active = false;
                 Synth.deactiveateOSC2();
             }
-            console.log(num);
         }
 
 
@@ -855,13 +541,13 @@ angular
         $scope.FLT1 = {
             number: 1,
             type: "lowpass",
-            rolloff: '-12',
+            roll: -12,
             freq: 200
         }
         $scope.FLT2 = {
             number: 2,
             type: "lowpass",
-            rolloff: '-12',
+            roll: -12,
             freq: 200
         }
 
@@ -916,18 +602,32 @@ angular
                     // deprecated
                     $scope.devices = access.inputs();
                     console.error('Update your Chrome version!');
+                    $scope.noMidi = true;
+                    $scope.noMidiMessage = "Use Google Chrome version 43 and above for WebMIDI";
+                    $scope.$digest(); 
                 } else {
                     if(access.inputs && access.inputs.size > 0) {
                         var inputs = access.inputs.values(),
                             input = null;
+                            first = null;
 
                         // iterate through the devices
                         for (input = inputs.next(); input && !input.done; input = inputs.next()) {
+                            if(first === null) {
+                                first = input;
+                            }
                             $scope.devices.push(input.value);
                         }
+                        $scope.activeDevice = first.value;
+                        DSP.plug(first.value);
                         $scope.$digest(); // ----------------------------- FIGURE OUT HOW TO REPLACE THIS --------------------------------
                     } else {
+                        $scope.noMidi = true;
+                        $scope.noMidiMessage = "Plug in a MIDI device and reload";
+                        console.log($scope.noMidi);
+                        console.log($scope.noMidiMessage);
                         console.error('No devices detected!');
+                        $scope.$digest(); 
                     }
 
                 }

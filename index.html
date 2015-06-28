@@ -18,11 +18,14 @@
 <body>
 	<div ng-app="DemoApp">
 		<div ng-controller="AppCtrl">
-
-			<div style="width:100%;padding:20px;float:left">
+			<div style="width:100%;padding:20px;float:left" ng-hide="noMidi">
 				<select ng-model="activeDevice" class="form-control" ng-options="device.manufacturer + ' ' + device.name for device in devices">
 				    <option value="" disabled>Choose a MIDI device...</option>
 				</select>
+			</div>
+
+			<div style="width:100%;padding:20px;float:left" ng-show="noMidi">
+				<h3>{{noMidiMessage}}</h3>
 			</div>
 
 			<div class="full">
