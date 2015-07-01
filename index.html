@@ -83,7 +83,7 @@
 							</select>
 						</div>
 						<h6>{{FLT1.freq}}</h6>
-						<md-slider flex min="0" max="2000" ng-model="FLT1.freq" aria-label="blue" id="blue-slider"></md-slider>
+						<md-slider flex min="0" max="1000" ng-model="FLT1.freq" aria-label="blue" id="blue-slider"></md-slider>
 					</div>
 					<hr>
 					<div>
@@ -116,7 +116,7 @@
 						</div>
 
 						<h6>{{FLT2.freq}}</h6>
-						<md-slider flex min="40" max="2000" ng-model="FLT2.freq" aria-label="blue" id="blue-slider" class="md-primary"></md-slider>
+						<md-slider flex min="40" max="1000" ng-model="FLT2.freq" aria-label="blue" id="blue-slider" class="md-primary"></md-slider>
 					</div>
 					<hr>
 					<div class="">
@@ -179,7 +179,7 @@
 						<md-slider flex min="1" max="8" ng-model="BTC.bit" aria-label="blue" id="blue-slider"></md-slider>
 					</div>
 					<div>
-						<h6>WETNESS {{BTC.wet}}</h6>
+						<h6>WETNESS {{BTC.wet / 1000}}</h6>
 						<md-slider flex min="0" max="1000" ng-model="BTC.wet" aria-label="blue" id="blue-slider"></md-slider>
 					</div>
 				</div>
