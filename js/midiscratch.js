@@ -117,6 +117,7 @@ angular
                 }
                 this.keys.push(keyObj);
                 var keyPlayed = this.midiToKey(midiKey);
+                console.log('KEY', keyPlayed);
                 keyObj[midiKey].main.triggerAttack(keyPlayed);
                 var oct = parseInt(keyPlayed.substr(keyPlayed.length-1, 1)) - 1;
                 if(this.subVolume !== -50) {
@@ -132,7 +133,7 @@ angular
         }
         Oscillator.prototype.createKeyOsc = function() {
             var key = new Tone.MonoSynth();
-            console.log('MONO', key)
+            // console.log('MONO', key)
             key.envelope.attack = this.attack/1000;
             key.envelope.decay = this.decay/1000;
             key.envelope.sustain = this.sustain/1000;
@@ -186,7 +187,7 @@ angular
 
         return Oscillator;
     })
-    .factory('AudioEngine', [ 'Oscill', 'Filt', '$window', function(Oscill, Filt, $window) {//['OSC', 'Oscill', 'AMP', 'FTR', 'Filt', '$window', function(Oscillator, Oscill, Amp, Filter, Filt, $window) {
+    .factory('AudioEngine', [ 'Oscill', 'Filt', '$window', function(Oscill, Filt, $window) {
         var syn = [new Oscill(), new Oscill()]
 
         var filt = new Tone.Filter(200, 'lowpass');
@@ -229,6 +230,7 @@ angular
 
         function _noteOn(note, velocity) {
             syn.forEach(function (osc) {
+                console.log('MIDI NOTE', note);
                 if(osc.active) osc.createNote(note, lfo1);
             });
         }
