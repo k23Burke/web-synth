@@ -1,5 +1,4 @@
 var app = require('express')();
-var fs = require('fs');
 
 app.get('/', function (req, res, next) {
 	res.sendFile(__dirname + '/index.html');
