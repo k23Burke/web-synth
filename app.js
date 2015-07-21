@@ -10,8 +10,8 @@ app.get('/css/main.css', function (req, res, next) {
 app.get('/js/midiscratch.js', function (req, res, next) {
 	res.sendFile(__dirname + '/js/midiscratch.js');
 });
-app.get('/js/Tone.js', function (req, res, next) {
-	res.sendFile(__dirname + '/js/Tone.js');
+app.get('/js/tone.js', function (req, res, next) {
+	res.sendFile(__dirname + '/js/tone.js');
 });
 
 app.get('favicon.ico', function (req, res, next) {
