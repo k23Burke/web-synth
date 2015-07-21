@@ -14,7 +14,7 @@ app.get('/js/midiscratch.js', function (req, res, next) {
 app.get('favicon.ico', function (req, res, next) {
 	res.sendFile(__dirname + '/img/main.css');
 });
-var server = app.listen(3000, function () {
+var server = app.listen(process.env.PORT || 3000, function () {
 	var host = server.address().address;
 	var port = server.address().port;
 
