@@ -117,7 +117,6 @@ angular
                 }
                 this.keys.push(keyObj);
                 var keyPlayed = this.midiToKey(midiKey);
-                console.log('KEY', keyPlayed);
                 keyObj[midiKey].main.triggerAttack(keyPlayed);
                 var oct = parseInt(keyPlayed.substr(keyPlayed.length-1, 1)) - 1;
                 if(this.subVolume !== -50) {
@@ -133,7 +132,6 @@ angular
         }
         Oscillator.prototype.createKeyOsc = function() {
             var key = new Tone.MonoSynth();
-            // console.log('MONO', key)
             key.envelope.attack = this.attack/1000;
             key.envelope.decay = this.decay/1000;
             key.envelope.sustain = this.sustain/1000;
@@ -157,9 +155,9 @@ angular
             var self = this;
             this.keys = this.keys.filter(function (keyObj) {
                 if(keyObj.hasOwnProperty(midiKey)) {
-                    keyObj[midiKey].main.triggerEnvelopeRelease(self.release/1000);
+                    keyObj[midiKey].main.triggerRelease(self.release/1000);
                     if(keyObj[midiKey].sub) {
-                        keyObj[midiKey].sub.triggerEnvelopeRelease(self.release/1000);
+                        keyObj[midiKey].sub.triggerRelease(self.release/1000);
                     }
                     var interval = window.setInterval( function() {
 
@@ -230,7 +228,6 @@ angular
 
         function _noteOn(note, velocity) {
             syn.forEach(function (osc) {
-                console.log('MIDI NOTE', note);
                 if(osc.active) osc.createNote(note, lfo1);
             });
         }
@@ -242,7 +239,6 @@ angular
         }
 
         function getAllOscillators() {
-            console.log('RETURNING ALL');
             return syn;
         }
 
@@ -476,7 +472,6 @@ angular
 angular
     .module('DemoApp', ['WebMIDI', 'Synth'])
     .controller('AppCtrl', ['$scope', 'Devices', 'DSP', 'AudioEngine', function($scope, devices, DSP, Synth) {
-        // console.log('Synth', Synth.getAllOscillators());
         $scope.devices = [];
         $scope.detune = 0;
         var oscArray = Synth.getAllOscillators();
