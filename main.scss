@@ -1,0 +1,70 @@
+
+$col-lest: #FFDDAA;
+$col-l: #D7AC6B;
+$col-m: #AE7F3A;
+$col-d: #865A18;
+$col-dest: #5A3601;
+
+* {
+	box-sizing:border-box;
+}
+#web-container{
+	background-color: $col-m;
+	color: $col-lest;
+}
+.quarter-cont {
+	width:25%;
+	padding:10px;
+	float:left;
+	min-height:520px;
+}
+.quarter-cont.notActive {
+	opacity:0.2;
+}
+button.btn {
+	background:none;
+	padding:0px 12px;
+	margin-left:5px;
+}
+.osc1, .osc2 {
+	background-color: $col-d;
+	padding:10px;
+	md-slider .md-track.md-track-fill {
+		background-color: $col-lest !important;
+
+	}
+	md-slider .md-thumb:after {
+		border-color: $col-l !important;
+		background-color: $col-dest !important;
+	}
+	input, select {
+		width:100%;
+		display:block;
+		color: $col-dest;
+		border-radius: 0px;
+	}
+}
+
+.full {
+	float:left;
+	width:100%;
+	background-color: $col-dest;
+	background-image: url(/img/woodGrainTexture.jpg);
+	background-blend-mode: multiply;
+}
+
+h1, h6 {
+	text-align: center;
+}
+
+h6.label {
+	text-align: left;
+	display: inline-block;
+	color:#333;
+}
+
+.midi-dropdown {
+	width:100%;
+	padding:20px;
+	float:left
+}

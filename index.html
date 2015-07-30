@@ -15,123 +15,130 @@
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
 </head>
 
-<body>
+<body id="web-container">
 	<div ng-app="DemoApp">
 		<div ng-controller="AppCtrl">
-			<div style="width:100%;padding:20px;float:left" ng-hide="noMidi">
-				<select ng-model="activeDevice" class="form-control" ng-options="device.manufacturer + ' ' + device.name for device in devices">
+			<div ng-hide="noMidi">
+				<select ng-model="activeDevice" class="form-control midi-dropdown" ng-options="device.manufacturer + ' ' + device.name for device in devices">
 				    <option value="" disabled>Choose a MIDI device...</option>
 				</select>
 			</div>
 
-			<div style="width:100%;padding:20px;float:left" ng-show="noMidi">
+			<div class="midi-dropdown" ng-show="noMidi">
 				<h3>{{noMidiMessage}}</h3>
 			</div>
 
 			<div class="full">
-				<div class="quarter osc1" ng-class="{notActive:!OSC1.active}">
-					<h1>Oscillator {{OSC1.number}}</h1>
-					<div>
-						<select ng-model="OSC1.wavForm" ng-options="wav for wav in wavForms">
-						</select>
-						<button ng-click="activate(1)" ng-hide="OSC1.active" type="button" class="btn btn-default">Activate</button>
-						<button ng-click="deactiveate(1)" ng-show="OSC1.active" type="button" class="btn btn-default">Deactiveate</button>
+				<div class="quarter-cont" ng-class="{notActive:!OSC1.active}">
+					<div class="osc1">
+						<h1>Oscillator {{OSC1.number}}</h1>
+						<div>
+							<select ng-model="OSC1.wavForm" ng-options="wav for wav in wavForms">
+							</select>
+							<button ng-click="activate(1)" ng-hide="OSC1.active" type="button" class="btn btn-default">Activate</button>
+							<button ng-click="deactiveate(1)" ng-show="OSC1.active" type="button" class="btn btn-default">Deactiveate</button>
+						</div>
+						<h6>Sub Bass - {{OSC1.sub - 50}} seconds</h6>
+						<md-slider flex min="0" max="50" ng-model="OSC1.sub" aria-label="red" id="red-slider"></md-slider>
+						<h6>Attack - {{OSC1.attack / 1000}} seconds</h6>
+						<md-slider flex min="0" max="10000" ng-model="OSC1.attack" aria-label="red" id="red-slider"></md-slider>
+						<h6>Decay - {{OSC1.decay / 1000}} seconds</h6>
+						<md-slider flex min="0" max="10000" ng-model="OSC1.decay" aria-label="red" id="red-slider"></md-slider>
+						<h6>Sustain - {{OSC1.sustain / 1000}} volume</h6>
+						<md-slider flex min="0" max="1000" ng-model="OSC1.sustain" aria-label="red" id="red-slider"></md-slider>
+						<h6>Release - {{OSC1.release / 1000}} seconds</h6>
+						<md-slider flex min="0" max="10000" ng-model="OSC1.release" aria-label="red" id="red-slider"></md-slider>
 					</div>
-					<h6>Sub Bass - {{OSC1.sub - 50}} seconds</h6>
-					<md-slider flex min="0" max="50" ng-model="OSC1.sub" aria-label="red" id="red-slider"></md-slider>
-					<h6>Attack - {{OSC1.attack / 1000}} seconds</h6>
-					<md-slider flex min="0" max="10000" ng-model="OSC1.attack" aria-label="red" id="red-slider"></md-slider>
-					<h6>Decay - {{OSC1.decay / 1000}} seconds</h6>
-					<md-slider flex min="0" max="10000" ng-model="OSC1.decay" aria-label="red" id="red-slider"></md-slider>
-					<h6>Sustain - {{OSC1.sustain / 1000}} volume</h6>
-					<md-slider flex min="0" max="1000" ng-model="OSC1.sustain" aria-label="red" id="red-slider"></md-slider>
-					<h6>Release - {{OSC1.release / 1000}} seconds</h6>
-					<md-slider flex min="0" max="10000" ng-model="OSC1.release" aria-label="red" id="red-slider"></md-slider>
 				</div>
 
 
-				<div class="quarter osc2" ng-class="{notActive:!OSC2.active}">
-					<h1>Oscillator {{OSC2.number}}</h1>
-					<div>
-						<select ng-model="OSC2.wavForm" ng-options="wav for wav in wavForms">
-						</select>
-						<button ng-click="activate(2)" ng-hide="OSC2.active" type="button" class="btn btn-default">Activate</button>
-						<button ng-click="deactiveate(2)" ng-show="OSC2.active" type="button" class="btn btn-default">Deactiveate</button>
+				<div class="quarter-cont" ng-class="{notActive:!OSC2.active}">
+					<div class="osc2">
+						<h1>Oscillator {{OSC2.number}}</h1>
+						<div>
+							<select ng-model="OSC2.wavForm" ng-options="wav for wav in wavForms">
+							</select>
+							<button ng-click="activate(2)" ng-hide="OSC2.active" type="button" class="btn btn-default">Activate</button>
+							<button ng-click="deactiveate(2)" ng-show="OSC2.active" type="button" class="btn btn-default">Deactiveate</button>
+						</div>
+						<h6>Sub Bass - {{OSC2.sub - 50}} seconds</h6>
+						<md-slider flex min="0" max="50" ng-model="OSC2.sub" aria-label="blue" id="blue-slider" class="md-primary"></md-slider>
+						<h6>Attack - {{OSC2.attack / 1000}} seconds</h6>
+						<md-slider flex min="0" max="10000" ng-model="OSC2.attack" aria-label="blue" id="blue-slider" class="md-primary"></md-slider>
+						<h6>Decay - {{OSC2.decay / 1000}} seconds</h6>
+						<md-slider flex min="0" max="10000" ng-model="OSC2.decay" aria-label="blue" id="blue-slider" class="md-primary"></md-slider>
+						<h6>Sustain - {{OSC2.sustain / 1000}} volume</h6>
+						<md-slider flex min="0" max="1000" ng-model="OSC2.sustain" aria-label="blue" id="blue-slider" class="md-primary"></md-slider>
+						<h6>Release - {{OSC2.release / 1000}} seconds</h6>
+						<md-slider flex min="0" max="10000" ng-model="OSC2.release" aria-label="blue" id="blue-slider" class="md-primary"></md-slider>
 					</div>
-					<h6>Sub Bass - {{OSC2.sub - 50}} seconds</h6>
-					<md-slider flex min="0" max="50" ng-model="OSC2.sub" aria-label="blue" id="blue-slider" class="md-primary"></md-slider>
-					<h6>Attack - {{OSC2.attack / 1000}} seconds</h6>
-					<md-slider flex min="0" max="10000" ng-model="OSC2.attack" aria-label="blue" id="blue-slider" class="md-primary"></md-slider>
-					<h6>Decay - {{OSC2.decay / 1000}} seconds</h6>
-					<md-slider flex min="0" max="10000" ng-model="OSC2.decay" aria-label="blue" id="blue-slider" class="md-primary"></md-slider>
-					<h6>Sustain - {{OSC2.sustain / 1000}} volume</h6>
-					<md-slider flex min="0" max="1000" ng-model="OSC2.sustain" aria-label="blue" id="blue-slider" class="md-primary"></md-slider>
-					<h6>Release - {{OSC2.release / 1000}} seconds</h6>
-					<md-slider flex min="0" max="10000" ng-model="OSC2.release" aria-label="blue" id="blue-slider" class="md-primary"></md-slider>
 				</div>
 
 				<!--ng-change="wavChange(filter.name)" -->
 
-				<div class="quarter osc1" ng-class="{notActive:!OSC1.active}">
-					<div>
-						<h1>Filter {{FLT1.number}}</h1>
+				<div class="quarter-cont" ng-class="{notActive:!OSC1.active}">
+					<div class="osc1">
 						<div>
-							<select ng-model="FLT1.type" ng-options="filter for filter in filterTypes">
-							</select>
+							<h1>Filter {{FLT1.number}}</h1>
+							<div>
+								<select ng-model="FLT1.type" ng-options="filter for filter in filterTypes">
+								</select>
 
-							<select ng-model="FLT1.roll" ng-options="roll for roll in filterRolloff">
-							</select>
+								<select ng-model="FLT1.roll" ng-options="roll for roll in filterRolloff">
+								</select>
+							</div>
+							<h6>{{FLT1.freq}}</h6>
+							<md-slider flex min="0" max="1000" ng-model="FLT1.freq" aria-label="blue" id="blue-slider"></md-slider>
 						</div>
-						<h6>{{FLT1.freq}}</h6>
-						<md-slider flex min="0" max="1000" ng-model="FLT1.freq" aria-label="blue" id="blue-slider"></md-slider>
-					</div>
-					<hr>
-					<div>
-						<h1>LFO</h1>
+						<hr>
 						<div>
-							<h6 class="label">Modulation Type: </h6>
-							<select ng-model="LFO1.type" ng-options="type for type in lfoForms">
-							</select><br/>
-							<h6 class="label">Rate:</h6>
-							<select ng-model="LFO1.rate" ng-options="rate for rate in lfoRates">
-							</select>
-						</div>
-						<div>
-							<h6>{{LFO1.dist}}</h6>
-							<md-slider flex min="0" max="1000" ng-model="LFO1.dist" aria-label="blue" id="blue-slider"></md-slider>
+							<h1>LFO</h1>
+							<div>
+								<h6 class="label">Modulation Type: </h6>
+								<select ng-model="LFO1.type" ng-options="type for type in lfoForms">
+								</select><br/>
+								<h6 class="label">Rate:</h6>
+								<select ng-model="LFO1.rate" ng-options="rate for rate in lfoRates">
+								</select>
+							</div>
+							<div>
+								<h6>{{LFO1.dist}}</h6>
+								<md-slider flex min="0" max="1000" ng-model="LFO1.dist" aria-label="blue" id="blue-slider"></md-slider>
+							</div>
 						</div>
 					</div>
 				</div>
 
-				<div class="quarter osc2" ng-class="{notActive:!OSC2.active}">
-
-					<div class="">
-						<h1>Filter</h1>
+				<div class="quarter-cont" ng-class="{notActive:!OSC2.active}">
+					<div class="osc2">
 						<div>
-							<select ng-model="FLT2.type" ng-options="filter for filter in filterTypes">
-							</select>
+							<h1>Filter {{FLT2.number}}</h1>
+							<div>
+								<select ng-model="FLT2.type" ng-options="filter for filter in filterTypes">
+								</select>
 
-							<select ng-model="FLT2.roll" ng-options="roll for roll in filterRolloff">
-							</select>
+								<select ng-model="FLT2.roll" ng-options="roll for roll in filterRolloff">
+								</select>
+							</div>
+
+							<h6>{{FLT2.freq}}</h6>
+							<md-slider flex min="40" max="1000" ng-model="FLT2.freq" aria-label="blue" id="blue-slider" class="md-primary"></md-slider>
 						</div>
-
-						<h6>{{FLT2.freq}}</h6>
-						<md-slider flex min="40" max="1000" ng-model="FLT2.freq" aria-label="blue" id="blue-slider" class="md-primary"></md-slider>
-					</div>
-					<hr>
-					<div class="">
-						<h1>LFO</h1>
+						<hr>
 						<div>
-							<h6 class="label">Modulation Type:</h6>
-							<select ng-model="LFO2.type" ng-options="type for type in lfoForms">
-							</select><br/>
-							<h6 class="label">Rate:</h6>
-							<select ng-model="LFO2.rate" ng-options="rate for rate in lfoRates">
-							</select>
-						</div>
-						<div>
-							<h6>{{LFO2.dist}}</h6>
-							<md-slider flex min="0" max="1000" ng-model="LFO2.dist" aria-label="blue" id="blue-slider" class="md-primary"></md-slider>
+							<h1>LFO</h1>
+							<div>
+								<h6 class="label">Modulation Type:</h6>
+								<select ng-model="LFO2.type" ng-options="type for type in lfoForms">
+								</select><br/>
+								<h6 class="label">Rate:</h6>
+								<select ng-model="LFO2.rate" ng-options="rate for rate in lfoRates">
+								</select>
+							</div>
+							<div>
+								<h6>{{LFO2.dist}}</h6>
+								<md-slider flex min="0" max="1000" ng-model="LFO2.dist" aria-label="blue" id="blue-slider" class="md-primary"></md-slider>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -139,69 +146,76 @@
 
 
 			<div class="full">
-				<div class="quarter">
+				<div class="quarter-cont">
+					<div class="osc2">
 
-					<h1>PingPong Delay</h1>
-					<div>
-						<md-slider flex min="0" max="1000" ng-model="PPD.feedback" aria-label="blue" id="blue-slider"></md-slider>
-					</div>
-						{{PPD.time}}
+						<h1>PingPong Delay</h1>
+						<div>
+							<md-slider flex min="0" max="1000" ng-model="PPD.feedback" aria-label="blue" id="blue-slider"></md-slider>
+						</div>
 						<select ng-model="PPD.time" ng-options="rate for rate in lfoRates">
 						</select>
-				</div>
-
-				<div class="quarter">
-
-					<h1>Chorus Effect</h1>
-					<div>
-						<h6>WETNESS {{CHR.wet / 1000}}</h6>
-						<md-slider flex min="0" max="1000" ng-model="CHR.wet" aria-label="blue" id="blue-slider"></md-slider>
-					</div>
-					<div>
-						<h6>FREQ {{CHR.frequency }}</h6>
-						<md-slider flex min="0" max="10" ng-model="CHR.frequency" aria-label="blue" id="blue-slider"></md-slider>
-					</div>
-					<div>
-						<h6>DEPTH {{CHR.depth / 1000}}</h6>
-						<md-slider flex min="0" max="1000" ng-model="CHR.depth" aria-label="blue" id="blue-slider"></md-slider>
-					</div>
-					<div>
-						<h6>TIME {{CHR.time / 100}}</h6>
-						<md-slider flex min="0" max="1000" ng-model="CHR.time" aria-label="blue" id="blue-slider"></md-slider>
 					</div>
 				</div>
 
-				<div class="quarter">
+				<div class="quarter-cont">
+					<div class="osc2">
 
-					<h1>Bit Crusher</h1>
-					<div>
-						<h6>BITS TO CRUSH {{BTC.bit}}</h6>
-						<md-slider flex min="1" max="8" ng-model="BTC.bit" aria-label="blue" id="blue-slider"></md-slider>
-					</div>
-					<div>
-						<h6>WETNESS {{BTC.wet / 1000}}</h6>
-						<md-slider flex min="0" max="1000" ng-model="BTC.wet" aria-label="blue" id="blue-slider"></md-slider>
+						<h1>Chorus Effect</h1>
+						<div>
+							<h6>WETNESS {{CHR.wet / 1000}}</h6>
+							<md-slider flex min="0" max="1000" ng-model="CHR.wet" aria-label="blue" id="blue-slider"></md-slider>
+						</div>
+						<div>
+							<h6>FREQ {{CHR.frequency }}</h6>
+							<md-slider flex min="0" max="10" ng-model="CHR.frequency" aria-label="blue" id="blue-slider"></md-slider>
+						</div>
+						<div>
+							<h6>DEPTH {{CHR.depth / 1000}}</h6>
+							<md-slider flex min="0" max="1000" ng-model="CHR.depth" aria-label="blue" id="blue-slider"></md-slider>
+						</div>
+						<div>
+							<h6>TIME {{CHR.time / 100}}</h6>
+							<md-slider flex min="0" max="1000" ng-model="CHR.time" aria-label="blue" id="blue-slider"></md-slider>
+						</div>
 					</div>
 				</div>
 
-				<div class="quarter">
+				<div class="quarter-cont">
+					<div class="osc2">
 
-					<h1>Phase Effect</h1>
-					<div>
-						<h6>BASE {{PHS.base}}</h6>
-						<md-slider flex min="0" max="1000" ng-model="PHS.base" aria-label="blue" id="blue-slider"></md-slider>
+						<h1>Bit Crusher</h1>
+						<div>
+							<h6>BITS TO CRUSH {{BTC.bit}}</h6>
+							<md-slider flex min="1" max="8" ng-model="BTC.bit" aria-label="blue" id="blue-slider"></md-slider>
+						</div>
+						<div>
+							<h6>WETNESS {{BTC.wet / 1000}}</h6>
+							<md-slider flex min="0" max="1000" ng-model="BTC.wet" aria-label="blue" id="blue-slider"></md-slider>
+						</div>
 					</div>
-					<div>
-						<h6>FREQ {{PHS.freq}}</h6>
-						<md-slider flex min="0" max="1000" ng-model="PHS.freq" aria-label="blue" id="blue-slider"></md-slider>
-					</div>
-					<div>
-						<h6>DEPTH {{PHS.depth / 1000}}</h6>
-						<md-slider flex min="0" max="1000" ng-model="PHS.depth" aria-label="blue" id="blue-slider"></md-slider>
-					</div>
-					<div>
-						<h6>WETNESS {{PHS.wet / 1000}}</h6>
-						<md-slider flex min="0" max="1000" ng-model="PHS.wet" aria-label="blue" id="blue-slider"></md-slider>
+				</div>
+
+				<div class="quarter-cont">
+					<div class="osc2">
+
+						<h1>Phase Effect</h1>
+						<div>
+							<h6>BASE {{PHS.base}}</h6>
+							<md-slider flex min="0" max="1000" ng-model="PHS.base" aria-label="blue" id="blue-slider"></md-slider>
+						</div>
+						<div>
+							<h6>FREQ {{PHS.freq}}</h6>
+							<md-slider flex min="0" max="1000" ng-model="PHS.freq" aria-label="blue" id="blue-slider"></md-slider>
+						</div>
+						<div>
+							<h6>DEPTH {{PHS.depth / 1000}}</h6>
+							<md-slider flex min="0" max="1000" ng-model="PHS.depth" aria-label="blue" id="blue-slider"></md-slider>
+						</div>
+						<div>
+							<h6>WETNESS {{PHS.wet / 1000}}</h6>
+							<md-slider flex min="0" max="1000" ng-model="PHS.wet" aria-label="blue" id="blue-slider"></md-slider>
+						</div>
 					</div>
 				</div>
 			</div>

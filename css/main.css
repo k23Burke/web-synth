@@ -1,40 +1,54 @@
 * {
-	box-sizing:border-box;
-}
+  box-sizing: border-box; }
 
-.quarter {
-	width:25%;
-	padding:10px;
-	float:left;
-	min-height:520px;
-}
-.quarter.notActive {
-	background-color: #000;
-	opacity:0.2;
-}
+#web-container {
+  background-color: #AE7F3A;
+  color: #FFDDAA; }
+
+.quarter-cont {
+  width: 25%;
+  padding: 10px;
+  float: left;
+  min-height: 520px; }
+
+.quarter-cont.notActive {
+  opacity: 0.2; }
+
 button.btn {
-	background:none;
-	padding:0px 12px;
-	margin-left:5px;
-}
-.osc1 {
-	background-color: #FFBFB2;
-}
-.osc2 {
-	background-color: #EEF8FF;
-}
+  background: none;
+  padding: 0px 12px;
+  margin-left: 5px; }
+
+.osc1, .osc2 {
+  background-color: #865A18;
+  padding: 10px; }
+  .osc1 md-slider .md-track.md-track-fill, .osc2 md-slider .md-track.md-track-fill {
+    background-color: #FFDDAA !important; }
+  .osc1 md-slider .md-thumb:after, .osc2 md-slider .md-thumb:after {
+    border-color: #D7AC6B !important;
+    background-color: #5A3601 !important; }
+  .osc1 input, .osc1 select, .osc2 input, .osc2 select {
+    width: 100%;
+    display: block;
+    color: #5A3601;
+    border-radius: 0px; }
 
 .full {
-	float:left;
-	width:100%;
-}
+  float: left;
+  width: 100%;
+  background-color: #5A3601;
+  background-image: url(/img/woodGrainTexture.jpg);
+  background-blend-mode: multiply; }
 
 h1, h6 {
-	text-align: center;
-}
+  text-align: center; }
 
 h6.label {
-	text-align: left;
-	display: inline-block;
-	color:#333;
-}
+  text-align: left;
+  display: inline-block;
+  color: #333; }
+
+.midi-dropdown {
+  width: 100%;
+  padding: 20px;
+  float: left; }

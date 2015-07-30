@@ -1,4 +1,16 @@
 // check MIDI device
+// var app = angular.module('WebSynth', []);
+
+// app.factory('MidiController', function ($window) {
+//     function connectToMidi() {
+//         if($window.navigator && typeof $window.navigator.requestMIDIAccess === 'function') {
+//             return $window.navigator.requestMIDIAccess();
+//         } else {
+
+//         }
+//     }
+// })
+// angular.module('WebMIDI')
 angular
     .module('WebMIDI', ['ngMaterial'])
     .factory('Devices', ['$window', function($window) {
@@ -36,7 +48,7 @@ angular
                 }
 
                 self.device = device;
-                self.device.onmidimessage = _onmidimessage;
+                // self.device.onmidimessage = _onmidimessage;
             }
         }
         function _onmidimessage(e) {
@@ -228,7 +240,11 @@ angular
 
         function _noteOn(note, velocity) {
             syn.forEach(function (osc) {
-                if(osc.active) osc.createNote(note, lfo1);
+                if(osc.active) {
+                    // osc.createNote(note, lfo1);
+                    console.log('ACTIVE OSC', osc);
+
+                }
             });
         }
 
@@ -471,12 +487,14 @@ angular
 
 angular
     .module('DemoApp', ['WebMIDI', 'Synth'])
-    .controller('AppCtrl', ['$scope', 'Devices', 'DSP', 'AudioEngine', function($scope, devices, DSP, Synth) {
+    .controller('AppCtrl', ['$window', '$scope', 'Devices', 'DSP', 'AudioEngine', function ($window, $scope, devices, DSP, Synth) {
         $scope.devices = [];
         $scope.detune = 0;
         var oscArray = Synth.getAllOscillators();
         var osc = oscArray[0];
         var osc2 = oscArray[1];
+
+
 
         $scope.wavForms = ['sine','square','triangle','sawtooth', 'pulse', 'pwm'];
         $scope.filterRolloff = ['-12', '-24', '-48'];
@@ -590,6 +608,23 @@ angular
 
 
 
+        $window.navigator.sayswho = (function(){
+            var ua= navigator.userAgent, tem,
+            M= ua.match(/(opera|chrome|safari|firefox|msie|trident(?=\/))\/?\s*(\d+)/i) || [];
+            if(/trident/i.test(M[1])){
+                tem=  /\brv[ :]+(\d+)/g.exec(ua) || [];
+                return 'IE '+(tem[1] || '');
+            }
+            if(M[1]=== 'Chrome'){
+                tem= ua.match(/\b(OPR|Edge)\/(\d+)/);
+                if(tem!= null) return tem.slice(1).join(' ').replace('OPR', 'Opera');
+            }
+            M= M[2]? [M[1], M[2]]: [navigator.appName, navigator.appVersion, '-?'];
+            if((tem= ua.match(/version\/(\d+)/i))!= null) M.splice(1, 1, tem[1]);
+            return M.join(' ');
+        })();
+        console.log("NAVIGATION", $window.navigator.appName);
+        console.log("NAMER", $window.navigator.sayswho);
 
 
         devices
@@ -630,7 +665,14 @@ angular
                 }
             })
             .catch(function(e) {
+                console.log('HERE RIGHT?!?!?!?!')
                 console.error(e);
+                $scope.noMidi = true;
+                $scope.noMidiMessage = "Plug in a MIDI device and reload";
+                console.log($scope.noMidi);
+                console.log($scope.noMidiMessage);
+                // console.error('No devices detected!');
+                $scope.$digest(); 
             });
 
         $scope.$watch('activeDevice', DSP.plug);
