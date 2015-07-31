@@ -1,40 +1,87 @@
-* {
-	box-sizing:border-box;
+/*
+$col-lest: #FFDDAA;
+$col-l: #D7AC6B;
+$col-m: #AE7F3A;
+$col-d: #865A18;
+$col-dest: #5A3601;
+.profile-pic {
+  float: left;
+  width: 250px;
+  @media screen and (max-width: $break-small) {
+    width: 100px;
+    float: none;
+  }
+  @media screen and (min-width: $break-large) {
+    float: right;
+  }
 }
 
-.quarter {
-	width:25%;
-	padding:10px;
-	float:left;
-	min-height:520px;
-}
-.quarter.notActive {
-	background-color: #000;
-	opacity:0.2;
-}
+*/
+* {
+  box-sizing: border-box; }
+
+#web-container {
+  background-color: #f3f3f3;
+  color: #f3f3f3;
+  font-family: 'Raleway';
+  font-weight: 100; }
+
+.quarter-cont {
+  width: 50%;
+  padding: 10px;
+  float: left; }
+  @media screen and (max-width: 400px) {
+    .quarter-cont {
+      width: 100%; } }
+  @media screen and (min-width: 800px) {
+    .quarter-cont {
+      width: 25%; } }
+
+.quarter-cont.notActive {
+  opacity: 0.2; }
+
 button.btn {
-	background:none;
-	padding:0px 12px;
-	margin-left:5px;
-}
-.osc1 {
-	background-color: #FFBFB2;
-}
-.osc2 {
-	background-color: #EEF8FF;
-}
+  background: none;
+  padding: 0px 12px;
+  text-shadow: none;
+  border: none;
+  box-shadow: none;
+  width: 100%;
+  color: #aaa; }
+
+.osc1, .osc2 {
+  padding: 10px; }
+  .osc1 md-slider .md-track.md-track-fill, .osc2 md-slider .md-track.md-track-fill {
+    background-color: #eeee55 !important; }
+  .osc1 md-slider .md-thumb:after, .osc2 md-slider .md-thumb:after {
+    border-color: #ddd !important;
+    background-color: #222 !important; }
+  .osc1 input, .osc1 select, .osc2 input, .osc2 select {
+    width: 100%;
+    display: block;
+    color: #222;
+    border-radius: 0px;
+    font-weight: 400; }
 
 .full {
-	float:left;
-	width:100%;
-}
-
-h1, h6 {
-	text-align: center;
-}
+  float: left;
+  width: 100%;
+  background-color: #222; }
+  .full h1,
+  .full h6 {
+    text-align: center; }
 
 h6.label {
-	text-align: left;
-	display: inline-block;
-	color:#333;
-}
+  text-align: left;
+  display: inline-block;
+  color: #333; }
+
+.midi-dropdown {
+  width: 100%;
+  padding: 20px;
+  float: left;
+  color: #222;
+  transition: 2s; }
+
+.midi-dropdown.messageFinished {
+  padding: 0px; }

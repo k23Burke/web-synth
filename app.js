@@ -1,7 +1,11 @@
 var app = require('express')();
 
+
 app.get('/', function (req, res, next) {
 	res.sendFile(__dirname + '/index.html');
+});
+app.get('/img/woodGrainTexture.jpg', function (req, res, next) {
+	res.sendFile(__dirname + '/img/woodGrainTexture.jpg');
 });
 
 app.get('/css/main.css', function (req, res, next) {

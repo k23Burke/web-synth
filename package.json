@@ -20,7 +20,13 @@
   "dependencies": {
     "express": "^4.13.1"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "gulp": "^3.9.0",
+    "gulp-concat": "^2.6.0",
+    "gulp-plumber": "^1.0.1",
+    "gulp-rename": "^1.2.2",
+    "gulp-sass": "^2.0.4"
+  },
   "keywords": [
     "MIDI",
     "Synth",
