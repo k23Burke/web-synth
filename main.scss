@@ -1,22 +1,53 @@
-
+/*
 $col-lest: #FFDDAA;
 $col-l: #D7AC6B;
 $col-m: #AE7F3A;
 $col-d: #865A18;
 $col-dest: #5A3601;
+.profile-pic {
+  float: left;
+  width: 250px;
+  @media screen and (max-width: $break-small) {
+    width: 100px;
+    float: none;
+  }
+  @media screen and (min-width: $break-large) {
+    float: right;
+  }
+}
+
+*/
+$col-lest: #f3f3f3;
+$col-l: #ddd;
+$col-m: #aaa;
+$col-d: #333;
+$col-dest: #222;
+
+//BREAK POINTS FOR LAYERS
+$break-small: 400px;
+$break-large: 800px;
+
+
 
 * {
 	box-sizing:border-box;
 }
 #web-container{
-	background-color: $col-m;
+	background-color: $col-lest;
 	color: $col-lest;
+	font-family: 'Raleway';
+	font-weight: 100;
 }
 .quarter-cont {
-	width:25%;
+	@media screen and (max-width: $break-small) {
+		width:100%;
+	}
+	@media screen and (min-width: $break-large) {
+		width:25%;
+	}
+	width:50%;
 	padding:10px;
 	float:left;
-	min-height:520px;
 }
 .quarter-cont.notActive {
 	opacity:0.2;
@@ -24,13 +55,16 @@ $col-dest: #5A3601;
 button.btn {
 	background:none;
 	padding:0px 12px;
-	margin-left:5px;
+	text-shadow:none;
+	border:none;
+	box-shadow:none;
+	width:100%;
+	color:$col-m;
 }
 .osc1, .osc2 {
-	background-color: $col-d;
 	padding:10px;
 	md-slider .md-track.md-track-fill {
-		background-color: $col-lest !important;
+		background-color: #eeee55 !important;
 
 	}
 	md-slider .md-thumb:after {
@@ -42,6 +76,7 @@ button.btn {
 		display:block;
 		color: $col-dest;
 		border-radius: 0px;
+		font-weight:400;
 	}
 }
 
@@ -49,13 +84,13 @@ button.btn {
 	float:left;
 	width:100%;
 	background-color: $col-dest;
-	background-image: url(/img/woodGrainTexture.jpg);
-	background-blend-mode: multiply;
+
+	h1,
+	h6 {
+		text-align: center;
+	}
 }
 
-h1, h6 {
-	text-align: center;
-}
 
 h6.label {
 	text-align: left;
@@ -66,5 +101,10 @@ h6.label {
 .midi-dropdown {
 	width:100%;
 	padding:20px;
-	float:left
+	float:left;
+	color:$col-dest;
+	transition: 2s;
+}
+.midi-dropdown.messageFinished {
+	padding:0px;
 }

@@ -8,6 +8,7 @@
 	<meta name="description" content="WebSynth">
 	<!-- <meta name="author" content="SitePoint"> -->
     <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/0.9.4/angular-material.min.css">
+    <link href='http://fonts.googleapis.com/css?family=Raleway:400,100' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="css/main.css">
     <!-- Latest compiled and minified CSS -->
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
@@ -17,18 +18,19 @@
 
 <body id="web-container">
 	<div ng-app="DemoApp">
-		<div ng-controller="AppCtrl">
-			<div ng-hide="noMidi">
+		<div ng-controller="AppCtrl" class="clearfix">
+			<div ng-hide="noMidi" ng-class="{messageFinished: messageDelivered}">
 				<select ng-model="activeDevice" class="form-control midi-dropdown" ng-options="device.manufacturer + ' ' + device.name for device in devices">
 				    <option value="" disabled>Choose a MIDI device...</option>
 				</select>
 			</div>
 
-			<div class="midi-dropdown" ng-show="noMidi">
+			<div class="midi-dropdown" ng-show="noMidi" ng-class="{messageFinished: messageDelivered}">
 				<h3>{{noMidiMessage}}</h3>
 			</div>
 
 			<div class="full">
+				<div class="clearfix">
 				<div class="quarter-cont" ng-class="{notActive:!OSC1.active}">
 					<div class="osc1">
 						<h1>Oscillator {{OSC1.number}}</h1>
@@ -81,9 +83,11 @@
 						<div>
 							<h1>Filter {{FLT1.number}}</h1>
 							<div>
+								<h6>Filter Type</h6>
 								<select ng-model="FLT1.type" ng-options="filter for filter in filterTypes">
 								</select>
 
+								<h6>Filter Rolloff</h6>
 								<select ng-model="FLT1.roll" ng-options="roll for roll in filterRolloff">
 								</select>
 							</div>
@@ -94,10 +98,10 @@
 						<div>
 							<h1>LFO</h1>
 							<div>
-								<h6 class="label">Modulation Type: </h6>
+								<h6>Modulation Type </h6>
 								<select ng-model="LFO1.type" ng-options="type for type in lfoForms">
 								</select><br/>
-								<h6 class="label">Rate:</h6>
+								<h6>Rate</h6>
 								<select ng-model="LFO1.rate" ng-options="rate for rate in lfoRates">
 								</select>
 							</div>
@@ -114,9 +118,11 @@
 						<div>
 							<h1>Filter {{FLT2.number}}</h1>
 							<div>
+								<h6>Filter Type</h6>
 								<select ng-model="FLT2.type" ng-options="filter for filter in filterTypes">
 								</select>
 
+								<h6>Filter Rolloff</h6>
 								<select ng-model="FLT2.roll" ng-options="roll for roll in filterRolloff">
 								</select>
 							</div>
@@ -128,10 +134,10 @@
 						<div>
 							<h1>LFO</h1>
 							<div>
-								<h6 class="label">Modulation Type:</h6>
+								<h6>Modulation Type</h6>
 								<select ng-model="LFO2.type" ng-options="type for type in lfoForms">
 								</select><br/>
-								<h6 class="label">Rate:</h6>
+								<h6>Rate</h6>
 								<select ng-model="LFO2.rate" ng-options="rate for rate in lfoRates">
 								</select>
 							</div>
@@ -143,9 +149,11 @@
 					</div>
 				</div>
 			</div>
+			<div class="clearfix">
+			<!-- </div>
 
 
-			<div class="full">
+			<div class="full"> -->
 				<div class="quarter-cont">
 					<div class="osc2">
 
@@ -218,6 +226,7 @@
 						</div>
 					</div>
 				</div>
+			</div>
 			</div>
 		</div>
 	</div>

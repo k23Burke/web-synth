@@ -48,7 +48,7 @@ angular
                 }
 
                 self.device = device;
-                // self.device.onmidimessage = _onmidimessage;
+                self.device.onmidimessage = _onmidimessage;
             }
         }
         function _onmidimessage(e) {
@@ -241,7 +241,7 @@ angular
         function _noteOn(note, velocity) {
             syn.forEach(function (osc) {
                 if(osc.active) {
-                    // osc.createNote(note, lfo1);
+                    osc.createNote(note, lfo1);
                     console.log('ACTIVE OSC', osc);
 
                 }
@@ -490,6 +490,7 @@ angular
     .controller('AppCtrl', ['$window', '$scope', 'Devices', 'DSP', 'AudioEngine', function ($window, $scope, devices, DSP, Synth) {
         $scope.devices = [];
         $scope.detune = 0;
+        $scope.messageDelivered = false;
         var oscArray = Synth.getAllOscillators();
         var osc = oscArray[0];
         var osc2 = oscArray[1];
@@ -497,7 +498,7 @@ angular
 
 
         $scope.wavForms = ['sine','square','triangle','sawtooth', 'pulse', 'pwm'];
-        $scope.filterRolloff = ['-12', '-24', '-48'];
+        $scope.filterRolloff = [-12, -24, -48];
         $scope.filterTypes = ["lowpass", "highpass", "bandpass", "lowshelf", "highshelf", "notch", "allpass", "peaking"];
         $scope.lfoRates = ["8m","4m","2m","1m","2n","3n","4n","8n","12n","16n"];
         $scope.lfoForms = ['sine','square','triangle','sawtooth'];
@@ -656,6 +657,10 @@ angular
                     } else {
                         $scope.noMidi = true;
                         $scope.noMidiMessage = "Plug in a MIDI device and reload";
+                        $window.setTimeout(function() {
+                            $scope.messageDelivered = true;
+                            $scope.$digest(); 
+                        }, 3000);
                         console.log($scope.noMidi);
                         console.log($scope.noMidiMessage);
                         console.error('No devices detected!');
@@ -669,6 +674,10 @@ angular
                 console.error(e);
                 $scope.noMidi = true;
                 $scope.noMidiMessage = "Plug in a MIDI device and reload";
+                $window.setTimeout(function() {
+                    $scope.messageDelivered = true;
+                    $scope.$digest(); 
+                }, 3000);
                 console.log($scope.noMidi);
                 console.log($scope.noMidiMessage);
                 // console.error('No devices detected!');
