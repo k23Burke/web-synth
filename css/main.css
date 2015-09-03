@@ -62,6 +62,18 @@ button.btn {
     color: #222;
     border-radius: 0px;
     font-weight: 400; }
+  .osc1 .oscLight, .osc2 .oscLight {
+    position: relative;
+    right: 0px;
+    height: 10px;
+    width: 10px;
+    border-radius: 50%;
+    margin-bottom: -10px;
+    float: right;
+    background-color: black;
+    text-indent: -9999px; }
+    .osc1 .oscLight.on, .osc2 .oscLight.on {
+      background-color: #eeee55; }
 
 .full {
   float: left;

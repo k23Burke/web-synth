@@ -33,6 +33,7 @@
 				<div class="clearfix">
 				<div class="quarter-cont" ng-class="{notActive:!OSC1.active}">
 					<div class="osc1">
+						<div class="oscLight">+</div>
 						<h1>Oscillator {{OSC1.number}}</h1>
 						<div>
 							<select ng-model="OSC1.wavForm" ng-options="wav for wav in wavForms">
@@ -56,6 +57,7 @@
 
 				<div class="quarter-cont" ng-class="{notActive:!OSC2.active}">
 					<div class="osc2">
+						<div class="oscLight">+</div>
 						<h1>Oscillator {{OSC2.number}}</h1>
 						<div>
 							<select ng-model="OSC2.wavForm" ng-options="wav for wav in wavForms">
