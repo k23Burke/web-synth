@@ -8,7 +8,7 @@
 	<meta name="description" content="WebSynth">
 	<!-- <meta name="author" content="SitePoint"> -->
     <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/0.9.4/angular-material.min.css">
-    <link href='https://fonts.googleapis.com/css?family=Raleway:400,100' rel='stylesheet' type='text/css'>
+    <!-- <link href='https://fonts.googleapis.com/css?family=Raleway:400,100' rel='stylesheet' type='text/css'> -->
     <link rel="stylesheet" href="css/main.css">
     <!-- Latest compiled and minified CSS -->
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
@@ -19,6 +19,7 @@
 <body id="web-container">
 	<div ng-app="DemoApp">
 		<div ng-controller="AppCtrl" class="clearfix">
+			<input type="text" name="" value="" ng-keypress="keyPressed($event)" ng-keyup="keyReleased($event)">
 			<div ng-hide="noMidi" ng-class="{messageFinished: messageDelivered}">
 				<select ng-model="activeDevice" class="form-control midi-dropdown" ng-options="device.manufacturer + ' ' + device.name for device in devices">
 				    <option value="" disabled>Choose a MIDI device...</option>
@@ -33,7 +34,7 @@
 				<div class="clearfix">
 				<div class="quarter-cont" ng-class="{notActive:!OSC1.active}">
 					<div class="osc1">
-						<div class="oscLight">+</div>
+						<div class="oscLight" ng-class="{ 'on': OSC1.light}">+</div>
 						<h1>Oscillator {{OSC1.number}}</h1>
 						<div>
 							<select ng-model="OSC1.wavForm" ng-options="wav for wav in wavForms">

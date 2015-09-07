@@ -13,13 +13,14 @@
 // angular.module('WebMIDI')
 angular
     .module('WebMIDI', ['ngMaterial'])
-    .factory('Devices', ['$window', function($window) {
+    .factory('Devices', ['$window', '$q', function($window, $q) {
         function _connect() {
             if($window.navigator && 'function' === typeof $window.navigator.requestMIDIAccess) {
                 return $window.navigator.requestMIDIAccess();
             } else {
                 throw 'No Web MIDI support';
             }
+            return deferred.promise;
         }
 
         return {
@@ -41,8 +42,16 @@ angular
         }
 
         function _plug(device) {
+            // if(device === 'keyboard') {
+            //     // unplug any already connected device
+            //     if(self.device) {
+            //         _unplug();
+            //     }
+
+            //     self.device = device;
+            //     self.device.onmidimessage = _onkeyboardmessage;
+            // }
             if(device) {
-                // unplug any already connected device
                 if(self.device) {
                     _unplug();
                 }
@@ -72,6 +81,10 @@ angular
             }
 
         }
+        // function _onkeyboardmessage (keyCode, type) {
+        //     if(type === 'press') Engine.noteOn(keyCode, null);
+        //     else Engine.noteOff(keyCode+32);
+        // }
 
         return {
             getAllOscillators: Engine.getAllOscillators,
@@ -199,7 +212,7 @@ angular
     })
     .factory('AudioEngine', [ 'Oscill', 'Filt', '$window', function(Oscill, Filt, $window) {
         var syn = [new Oscill(), new Oscill()]
-
+        var THENOTEWASPRESSED = false;
         var filt = new Tone.Filter(200, 'lowpass');
         var filt2 = new Tone.Filter(200, 'lowpass');
         syn[0].volume.connect(filt);
@@ -239,8 +252,9 @@ angular
 
 
         function _noteOn(note, velocity) {
-            syn.forEach(function (osc) {
+            syn.forEach(function (osc, i) {
                 if(osc.active) {
+                    THENOTEWASPRESSED = true;
                     osc.createNote(note, lfo1);
                     console.log('ACTIVE OSC', osc);
 
@@ -249,7 +263,8 @@ angular
         }
 
         function _noteOff(note) {
-            syn.forEach(function (osc) {
+            syn.forEach(function (osc,i) {
+                THENOTEWASPRESSED = false;
                 osc.releaseNote(note);
             });
         }
@@ -422,7 +437,7 @@ angular
         return {
 
 
-
+            notePressed: THENOTEWASPRESSED,
             getAllOscillators: getAllOscillators,
             detuune: changeDetune,
 
@@ -491,18 +506,20 @@ angular
         $scope.devices = [];
         $scope.detune = 0;
         $scope.messageDelivered = false;
-        var oscArray = Synth.getAllOscillators();
-        var osc = oscArray[0];
-        var osc2 = oscArray[1];
+        $scope.oscArray = Synth.getAllOscillators();
+        var osc = $scope.oscArray[0];
+        var osc2 = $scope.oscArray[1];
 
 
 
+        $scope.enableComputerKeyboardMidi = false;
         $scope.wavForms = ['sine','square','triangle','sawtooth', 'pulse', 'pwm'];
         $scope.filterRolloff = [-12, -24, -48];
         $scope.filterTypes = ["lowpass", "highpass", "bandpass", "lowshelf", "highshelf", "notch", "allpass", "peaking"];
         $scope.lfoRates = ["8m","4m","2m","1m","2n","3n","4n","8n","12n","16n"];
         $scope.lfoForms = ['sine','square','triangle','sawtooth'];
         $scope.OSC1 = {
+            light: osc.physicalKeyDown,
             number: 1,
             active: osc.active,
             wavForm: osc.wavForm,
@@ -518,6 +535,7 @@ angular
         }
 
         $scope.OSC2 = {
+            light: osc2.physicalKeyDown,
             number: 2,
             active: osc2.active,
             wavForm: osc2.wavForm,
@@ -631,6 +649,7 @@ angular
         devices
             .connect()
             .then(function(access) {
+
                 if('function' === typeof access.inputs) {
                     // deprecated
                     $scope.devices = access.inputs();
@@ -654,7 +673,9 @@ angular
                         $scope.activeDevice = first.value;
                         DSP.plug(first.value);
                         $scope.$digest(); // ----------------------------- FIGURE OUT HOW TO REPLACE THIS --------------------------------
-                    } else {
+                    } else { //BACK UP TO ASCII keyPRESSING
+                        $scope.enableComputerKeyboardMidi = true;
+                        DSP.plug('keyboard');
                         $scope.noMidi = true;
                         $scope.noMidiMessage = "Plug in a MIDI device and reload";
                         $window.setTimeout(function() {
@@ -669,20 +690,40 @@ angular
 
                 }
             })
-            .catch(function(e) {
+            .catch(function(e) { //Major error of sorts
                 console.log('HERE RIGHT?!?!?!?!')
                 console.error(e);
                 $scope.noMidi = true;
-                $scope.noMidiMessage = "Plug in a MIDI device and reload";
+                $scope.noMidiMessage = "Your browser does not have MIDI compatability. Please try an updated Google Chrome for best experience.";
                 $window.setTimeout(function() {
                     $scope.messageDelivered = true;
                     $scope.$digest(); 
                 }, 3000);
-                console.log($scope.noMidi);
-                console.log($scope.noMidiMessage);
+                // console.log($scope.noMidi);
+                // console.log($scope.noMidiMessage);
                 // console.error('No devices detected!');
                 $scope.$digest(); 
             });
+
+        function returnOneOSC() {
+            var oscAr = Synth.getAllOscillators();
+            return oscAr[0].physicalKeyDown;
+        }
+        $scope.synthskey = Synth.notePressed;
+
+        // $scope.$watch('synthskey', function() {
+        //     console.log('SDFHSDIFGHSDFKSD');
+        // });
+
+        $scope.keyPressed = function (event) {
+            if($scope.enableComputerKeyboardMidi) Synth.noteOn(event.keyCode, 100);
+            console.log('KEY CODE', event.keyCode-60);
+        }
+
+        $scope.keyReleased = function(event) {
+            if ($scope.enableComputerKeyboardMidi) Synth.noteOff(event.keyCode+32);
+            console.log('KEY RELEASED', event.keyCode+32-60);
+        }
 
         $scope.$watch('activeDevice', DSP.plug);
         $scope.$watch('detune', Synth.detuune);
