@@ -14,7 +14,7 @@ gulp.task('default', function () {
 });
 
 gulp.task('buildJS', function() {
-	gulp.src('./js/components/**/*.js')
+	gulp.src(['./app/javascripts/app.js', './app/javascripts/components/**/*.js'])
 	.pipe(plumber())
 	.pipe(concat('main.js'))
 	// .pipe(uglify())

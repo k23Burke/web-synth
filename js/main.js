@@ -1,5 +1,6 @@
-angular.module('synthesizer')
-.factory('MidiDeviceFactory', ['$window', 'SynthFactory', function ($window, SynthFactory) {
+var app = angular.module('synthesizer', []);
+// angular.module('synthesizer')
+app.factory('MidiDeviceFactory', ['$window', 'SynthFactory', function ($window, SynthFactory) {
 	function connectMidiBrowser() {
 		if($window.navigator && 'function' === typeof $window.navigator.requestMIDIAccess) {
 
@@ -61,11 +62,11 @@ angular.module('synthesizer')
 
 	    switch(e.data[0]) {
 	        case 144:
-	        console.log('NOTE HIT');
+		        console.log('NOTE HIT');
 	            SynthFactory.noteOn(e.data[1], e.data[2]);
 	        break;
 	        case 128:
-	        console.log('NOTE RELEASE');
+		        console.log('NOTE RELEASE');
 	            SynthFactory.releaseNote(e.data[1]);
 	        break;
 	        case 224:
@@ -83,8 +84,8 @@ angular.module('synthesizer')
 
 	}
 }])
-angular.module('synthesizer')
-.factory('Oscillator', function() {
+// angular.module('synthesizer')
+app.factory('Oscillator', function() {
     function Oscillator() {
         this.keys = [];
         this.active = false;
@@ -180,8 +181,8 @@ angular.module('synthesizer')
     return Oscillator;
 	
 })
-angular.module('synthesizer')
-.controller('SynthController', ['$scope', 'MidiDeviceFactory', 'SynthFactory', function ($scope, Devices, SynthFactory) {
+// angular.module('synthesizer')
+app.controller('SynthController', ['$scope', 'MidiDeviceFactory', 'SynthFactory', '$window', function ($scope, Devices, SynthFactory, $window) {
 //TODO: see how many watchers are on page
     //set scope vars
     $scope.devices = [];
@@ -196,7 +197,8 @@ angular.module('synthesizer')
     $scope.lfoRates = ["8m","4m","2m","1m","2n","3n","4n","8n","12n","16n"];
     $scope.lfoForms = ['sine','square','triangle','sawtooth'];
 
-    var synth = SynthFactory();
+    var synth = new SynthFactory();
+    console.log('SYNTH', synth);
     synth.initialize();
 
     synth.oscillators.forEach(function (osc, index) {
@@ -272,8 +274,8 @@ angular.module('synthesizer')
             });
 
 }]);
-angular.module('synthesizer')
-.factory('SynthFactory', ['Oscillator', function (Oscillator) {
+// angular.module('synthesizer')
+app.factory('SynthFactory', ['Oscillator', function (Oscillator) {
 	function synthesizer() { //TODO: pass in number of oscillators to create
         this.oscillators = [];
         this.filters = [];
@@ -291,13 +293,14 @@ angular.module('synthesizer')
 		this.oscillators = [new Oscillator(), new Oscillator()];
 		this.filters = [new Tone.Filter(200, 'lowpass'), new Tone.Filter(200, 'lowpass')];
 		this.lfos = [new Tone.LFO("4m", 100, 600), new Tone.LFO("4m", 100, 600)];
+        var self = this;
 
 		this.oscillators.forEach(function (osc, i) {
 			osc.active = true;
-			osc.volume.connect(this.filters[i]);
-			this.lfos[i].connect(this.filters[i].frequency);
-			this.lfos[i].sync();
-			this.filters[i].connect(ppdelay);
+			osc.volume.connect(self.filters[i]);
+			self.lfos[i].connect(self.filters[i].frequency);
+			self.lfos[i].sync();
+			self.filters[i].connect(self.ppdelay);
 		})
 
         this.ppdelay.wet.value = 0.2;

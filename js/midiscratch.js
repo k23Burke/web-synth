@@ -519,7 +519,8 @@ angular
         $scope.lfoRates = ["8m","4m","2m","1m","2n","3n","4n","8n","12n","16n"];
         $scope.lfoForms = ['sine','square','triangle','sawtooth'];
         $scope.OSC1 = {
-            light: osc.physicalKeyDown,
+            light: false,
+            active: true,
             number: 1,
             active: osc.active,
             wavForm: osc.wavForm,
@@ -535,7 +536,8 @@ angular
         }
 
         $scope.OSC2 = {
-            light: osc2.physicalKeyDown,
+            light: false,
+            active: true,
             number: 2,
             active: osc2.active,
             wavForm: osc2.wavForm,
@@ -705,11 +707,11 @@ angular
                 $scope.$digest(); 
             });
 
-        function returnOneOSC() {
-            var oscAr = Synth.getAllOscillators();
-            return oscAr[0].physicalKeyDown;
-        }
-        $scope.synthskey = Synth.notePressed;
+        // function returnOneOSC() {
+        //     var oscAr = Synth.getAllOscillators();
+        //     return oscAr[0].physicalKeyDown;
+        // }
+        // $scope.synthskey = Synth.notePressed;
 
         // $scope.$watch('synthskey', function() {
         //     console.log('SDFHSDIFGHSDFKSD');
@@ -717,11 +719,14 @@ angular
 
         $scope.keyPressed = function (event) {
             if($scope.enableComputerKeyboardMidi) Synth.noteOn(event.keyCode, 100);
-            console.log('KEY CODE', event.keyCode-60);
+            if($scope.OSC1.active) $scope.OSC1.light = true;
+            if($scope.OSC2.active) $scope.OSC2.light = true;
         }
 
         $scope.keyReleased = function(event) {
             if ($scope.enableComputerKeyboardMidi) Synth.noteOff(event.keyCode+32);
+            $scope.OSC1.light = false;
+            $scope.OSC2.light = false;
             console.log('KEY RELEASED', event.keyCode+32-60);
         }
 

@@ -1,5 +1,5 @@
-angular.module('synthesizer')
-.factory('MidiDeviceFactory', ['$window', 'SynthFactory', function ($window, SynthFactory) {
+// angular.module('synthesizer')
+app.factory('MidiDeviceFactory', ['$window', 'SynthFactory', function ($window, SynthFactory) {
 	function connectMidiBrowser() {
 		if($window.navigator && 'function' === typeof $window.navigator.requestMIDIAccess) {
 

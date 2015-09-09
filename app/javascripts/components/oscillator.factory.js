@@ -1,5 +1,5 @@
-angular.module('synthesizer')
-.factory('Oscillator', function() {
+// angular.module('synthesizer')
+app.factory('Oscillator', function() {
     function Oscillator() {
         this.keys = [];
         this.active = false;

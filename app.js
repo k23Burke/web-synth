@@ -4,15 +4,17 @@ var app = require('express')();
 app.get('/', function (req, res, next) {
 	res.sendFile(__dirname + '/index.html');
 });
-app.get('/img/woodGrainTexture.jpg', function (req, res, next) {
-	res.sendFile(__dirname + '/img/woodGrainTexture.jpg');
+app.get('/new', function (req, res, next) {
+	res.sendFile(__dirname + '/new.html');
 });
-
 app.get('/css/main.css', function (req, res, next) {
 	res.sendFile(__dirname + '/css/main.css');
 });
 app.get('/js/midiscratch.js', function (req, res, next) {
 	res.sendFile(__dirname + '/js/midiscratch.js');
+});
+app.get('/js/main.js', function (req, res, next) {
+	res.sendFile(__dirname + '/js/main.js');
 });
 app.get('/js/tone.js', function (req, res, next) {
 	res.sendFile(__dirname + '/js/tone.js');

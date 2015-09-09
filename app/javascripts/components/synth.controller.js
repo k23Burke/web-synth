@@ -1,5 +1,5 @@
-angular.module('synthesizer')
-.controller('SynthController', ['$scope', 'MidiDeviceFactory', 'SynthFactory', function ($scope, Devices, SynthFactory) {
+// angular.module('synthesizer')
+app.controller('SynthController', ['$scope', 'MidiDeviceFactory', 'SynthFactory', '$window', function ($scope, Devices, SynthFactory, $window) {
 //TODO: see how many watchers are on page
     //set scope vars
     $scope.devices = [];
@@ -14,7 +14,8 @@ angular.module('synthesizer')
     $scope.lfoRates = ["8m","4m","2m","1m","2n","3n","4n","8n","12n","16n"];
     $scope.lfoForms = ['sine','square','triangle','sawtooth'];
 
-    var synth = SynthFactory();
+    var synth = new SynthFactory();
+    console.log('SYNTH', synth);
     synth.initialize();
 
     synth.oscillators.forEach(function (osc, index) {
