@@ -11,6 +11,10 @@ gulp.task('default', function () {
 		.pipe(sass())
 		.pipe(rename('main.css'))
 		.pipe(gulp.dest('./css'))
+
+	gulp.start('buildJS');
+
+	gulp.watch('./app/javascripts/**/*.js', ['buildJS'])
 });
 
 gulp.task('buildJS', function() {

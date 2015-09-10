@@ -152,6 +152,7 @@ app.factory('SynthFactory', ['Oscillator', function (Oscillator) {
                 this.phaser.wet = amount /1000;
             }
 
+
     return synthesizer;
 
 }]);

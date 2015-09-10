@@ -58,7 +58,7 @@ app.controller('SynthController', ['$scope', 'MidiDeviceFactory', 'SynthFactory'
                             $scope.devices.push(input.value);
                         }
                         $scope.activeDevice = first.value;
-                        DSP.plug(first.value);
+                        Devices.pluginMidiDevice(first.value);
                         $scope.$digest(); // ----------------------------- FIGURE OUT HOW TO REPLACE THIS --------------------------------
                     } else {
                         $scope.noMidi = true;
