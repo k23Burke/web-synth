@@ -10,7 +10,7 @@ gulp.task('default', function () {
 		.pipe(plumber())
 		.pipe(sass())
 		.pipe(rename('main.css'))
-		.pipe(gulp.dest('./css'))
+		.pipe(gulp.dest('./public/css'))
 
 	gulp.start('buildJS');
 
@@ -22,5 +22,5 @@ gulp.task('buildJS', function() {
 	.pipe(plumber())
 	.pipe(concat('main.js'))
 	// .pipe(uglify())
-	.pipe(gulp.dest('./js'))
+	.pipe(gulp.dest('./public/js'))
 })

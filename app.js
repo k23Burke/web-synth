@@ -1,5 +1,7 @@
-var app = require('express')();
+var express = require('express');
+var app = express();
 
+app.use(express.static('public'));
 
 app.get('/', function (req, res, next) {
 	res.sendFile(__dirname + '/index.html');
@@ -7,22 +9,7 @@ app.get('/', function (req, res, next) {
 app.get('/new', function (req, res, next) {
 	res.sendFile(__dirname + '/new.html');
 });
-app.get('/css/main.css', function (req, res, next) {
-	res.sendFile(__dirname + '/css/main.css');
-});
-app.get('/js/midiscratch.js', function (req, res, next) {
-	res.sendFile(__dirname + '/js/midiscratch.js');
-});
-app.get('/js/main.js', function (req, res, next) {
-	res.sendFile(__dirname + '/js/main.js');
-});
-app.get('/js/tone.js', function (req, res, next) {
-	res.sendFile(__dirname + '/js/tone.js');
-});
 
-app.get('favicon.ico', function (req, res, next) {
-	res.sendFile(__dirname + '/img/main.css');
-});
 var server = app.listen(process.env.PORT || 3000, function () {
 	var host = server.address().address;
 	var port = server.address().port;
