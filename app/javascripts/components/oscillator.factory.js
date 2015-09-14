@@ -17,7 +17,7 @@ app.factory('Oscillator', function() {
         // this.volume.toMaster();
         return this;
     }
-    Oscillator.prototype.createNote = function(midiKey, lfo) {
+    Oscillator.prototype.createNote = function(midiKey) {
 
         if(this.active) {
             var keyObj = {};

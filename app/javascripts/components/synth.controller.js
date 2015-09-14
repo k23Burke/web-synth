@@ -8,6 +8,7 @@ app.controller('SynthController', ['$scope', 'MidiDeviceFactory', 'SynthFactory'
     $scope.oscillators = [];
 
     //set scope options
+    $scope.enableComputerKeyboardMidi = false;
     $scope.wavForms = ['sine','square','triangle','sawtooth', 'pulse', 'pwm'];
     $scope.filterRolloff = [-12, -24, -48];
     $scope.filterTypes = ["lowpass", "highpass", "bandpass", "lowshelf", "highshelf", "notch", "allpass", "peaking"];
@@ -15,8 +16,24 @@ app.controller('SynthController', ['$scope', 'MidiDeviceFactory', 'SynthFactory'
     $scope.lfoForms = ['sine','square','triangle','sawtooth'];
 
     var synth = new SynthFactory();
+    synth.initialize();
     console.log('SYNTH', synth);
     synth.initialize();
+
+
+
+    $scope.keyPressed = function (event) {
+        if($scope.enableComputerKeyboardMidi) synth.noteOn(event.keyCode, 100);
+        // if($scope.OSC1.active) $scope.OSC1.light = true;
+        // if($scope.OSC2.active) $scope.OSC2.light = true;
+    }
+
+    $scope.keyReleased = function(event) {
+        if ($scope.enableComputerKeyboardMidi) synth.noteOff(event.keyCode+32);
+        // $scope.OSC1.light = false;
+        // $scope.OSC2.light = false;
+        console.log('KEY RELEASED', event.keyCode+32-60);
+    }
 
     synth.oscillators.forEach(function (osc, index) {
         $scope.oscillators.push({
@@ -61,6 +78,8 @@ app.controller('SynthController', ['$scope', 'MidiDeviceFactory', 'SynthFactory'
                         Devices.pluginMidiDevice(first.value);
                         $scope.$digest(); // ----------------------------- FIGURE OUT HOW TO REPLACE THIS --------------------------------
                     } else {
+                        $scope.enableComputerKeyboardMidi = true;
+                        DSP.plug('keyboard');
                         $scope.noMidi = true;
                         $scope.noMidiMessage = "Plug in a MIDI device and reload";
                         $window.setTimeout(function() {

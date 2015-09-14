@@ -39,10 +39,11 @@ app.factory('SynthFactory', ['Oscillator', function (Oscillator) {
     //WHOLE SYNTH FUNCTIONS
 	    //TODO: combine noteOn and noteOff to one function
 	    synthesizer.prototype.noteOn = function (note, velocity) {
+            var self = this;
 	        this.oscillators.forEach(function (osc, i) {
 	            if(osc.active) {
 	                THENOTEWASPRESSED = true;
-	                osc.createNote(note, lfo1);
+	                osc.createNote(note);
 	                console.log('ACTIVE OSC', osc);
 	            }
 	        });
