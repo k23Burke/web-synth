@@ -21,17 +21,18 @@ app.factory('SynthFactory', ['Oscillator', function (Oscillator) {
 
 		this.oscillators.forEach(function (osc, i) {
 			osc.active = true;
-			osc.volume.connect(self.filters[i]);
-			self.lfos[i].connect(self.filters[i].frequency);
-			self.lfos[i].sync();
-			self.filters[i].connect(self.ppdelay);
+            osc.volume.toMaster();
+			// osc.volume.connect(self.filters[i]);
+			// self.lfos[i].connect(self.filters[i].frequency);
+			// self.lfos[i].sync();
+			// self.filters[i].connect(self.ppdelay);
 		})
 
-        this.ppdelay.wet.value = 0.2;
-        this.ppdelay.connect(this.chorus);
-        this.chorus.connect(this.bit);
-        this.bit.connect(this.phaser);
-        this.phaser.toMaster();
+        // this.ppdelay.wet.value = 0.2;
+        // this.ppdelay.connect(this.chorus);
+        // this.chorus.connect(this.bit);
+        // this.bit.connect(this.phaser);
+        // this.phaser.toMaster();
         Tone.Transport.start();
     }
 
