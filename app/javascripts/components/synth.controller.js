@@ -1,5 +1,7 @@
 // angular.module('synthesizer')
-app.controller('SynthController', ['$scope', 'MidiDeviceFactory', 'SynthFactory', '$window', function ($scope, Devices, SynthFactory, $window) {
+app.controller('SynthController', 
+    ['$scope', 'MidiDeviceFactory', 'SynthFactory', '$window', 
+    function ($scope, Devices, SynthFactory, $window) {
 //TODO: see how many watchers are on page
     //set scope vars
     $scope.devices = [];
@@ -22,16 +24,17 @@ app.controller('SynthController', ['$scope', 'MidiDeviceFactory', 'SynthFactory'
 
 
     $scope.keyPressed = function (event) {
-        if($scope.enableComputerKeyboardMidi) $scope.synth.noteOn(event.keyCode, 100);
-        // if($scope.OSC1.active) $scope.OSC1.light = true;
-        // if($scope.OSC2.active) $scope.OSC2.light = true;
+        console.log('KEY PRESSED', event.keyCode);
+        if($scope.enableComputerKeyboardMidi) {
+            $scope.synth.noteOn(event.keyCode, 100);
+        }
     }
 
     $scope.keyReleased = function(event) {
-        if ($scope.enableComputerKeyboardMidi) $scope.synth.noteOff(event.keyCode+22);
-        // $scope.OSC1.light = false;
-        // $scope.OSC2.light = false;
         console.log('KEY RELEASED', event.keyCode+22-60);
+        if ($scope.enableComputerKeyboardMidi) {
+            $scope.synth.noteOff(event.keyCode+22);
+        }
     }
 
     // $scope.synth.oscillators.forEach(function (osc, index) {
@@ -75,6 +78,22 @@ app.controller('SynthController', ['$scope', 'MidiDeviceFactory', 'SynthFactory'
                         }
                         $scope.activeDevice = first.value;
                         Devices.pluginMidiDevice(first.value);
+                        first.value.onmidimessage = function(e) {              
+                            switch(e.data[0]) {
+                                case 144:
+                                    console.log('NOTE HIT');
+                                    $scope.synth.noteOn(e.data[1], e.data[2]);
+                                break;
+                                case 128:
+                                    console.log('NOTE RELEASE');
+                                    $scope.synth.noteOff(e.data[1]);
+                                break;
+                                case 224:
+                                    // SynthFactory.detune(e.data[2]);
+                                    console.log('NO DETUNE FOR NOW');
+                                break;
+                            }
+                        }
                         $scope.$digest(); // ----------------------------- FIGURE OUT HOW TO REPLACE THIS --------------------------------
                     } else {
                         $scope.enableComputerKeyboardMidi = true;

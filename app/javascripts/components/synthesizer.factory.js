@@ -43,7 +43,6 @@ app.factory('SynthFactory', ['Oscillator', function (Oscillator) {
             var self = this;
 	        this.oscillators.forEach(function (osc, i) {
 	            if(osc.active) {
-	                THENOTEWASPRESSED = true;
 	                osc.createNote(note);
 	                console.log('ACTIVE OSC', osc);
 	            }
@@ -52,8 +51,8 @@ app.factory('SynthFactory', ['Oscillator', function (Oscillator) {
 
 	    synthesizer.prototype.noteOff = function (note) {
 	        this.oscillators.forEach(function (osc,i) {
-	            THENOTEWASPRESSED = false;
-	            osc.releaseNote(note);
+                osc.releaseNote(note);
+                console.log('RELEASING OSC', osc);
 	        });
 	    }
 
