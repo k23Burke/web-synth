@@ -36,11 +36,11 @@ app.factory('MidiDeviceFactory', ['$window', 'SynthFactory', function ($window, 
 
 
 	function _unplug() {
-	    self.device.onmidimessage = null;
+	    self.device.onMidiMessage = null;
 	    self.device = null;
 	}
 
-	function pluginMidiDevice(device) {
+	function pluginMidiDevice(device, cb) {
 	    if(device) {
 	        // unplug any already connected device
 	        if(self.device) {
@@ -48,10 +48,10 @@ app.factory('MidiDeviceFactory', ['$window', 'SynthFactory', function ($window, 
 	        }
 
 	        self.device = device;
-	        self.device.onmidimessage = onmidimessage;
+	        // self.device.onmidimessage = cb(onMidiMessage);
 	    }
 	}
-	function onmidimessage(e) {
+	function onMidiMessage(e) {
 	    /**
 	    * e.data is an array
 	    * e.data[0] = on (144) / off (128) / detune (224)
@@ -79,7 +79,8 @@ app.factory('MidiDeviceFactory', ['$window', 'SynthFactory', function ($window, 
 
 	return {
 		connectMidiBrowser: connectMidiBrowser,
-		pluginMidiDevice: pluginMidiDevice
+		pluginMidiDevice: pluginMidiDevice,
+		onMidiMessage: onMidiMessage,
 
 	}
 }])

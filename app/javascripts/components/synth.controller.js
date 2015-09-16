@@ -7,7 +7,6 @@ app.controller('SynthController',
     $scope.devices = [];
     $scope.detune = 0;
     $scope.messageDelivered = false;
-    $scope.oscillators = [];
 
     //set scope options
     $scope.enableComputerKeyboardMidi = false;

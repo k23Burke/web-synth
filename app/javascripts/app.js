@@ -1,1 +1,1 @@
-var app = angular.module('synthesizer', []);
+var app = angular.module('synthesizer', ['ngMaterial']);
