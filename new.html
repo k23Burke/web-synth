@@ -34,9 +34,11 @@
 				<div class="clearfix">
 					<div ng-repeat="oscillator in synth.oscillators track by $index" class="quarter-cont" ng-class="{notActive:!oscillator.active}">
 						<div class="osc{{$index+1}}">
-							<div class="oscLight" ng-class="{ 'on': oscillator.keys.length}">+</div>
+							<div class="oscLight" ng-class="{ 'on': keyCurrentlyPressed && oscillator.active}">+</div>
 
 							<h1>Oscillator {{$index}}</h1>
+							<h1>{{keyCurrentlyPressed}} {{oscillator.active}}</h1>
+
 							<div>
 								<select ng-model="oscillator.wavForm" ng-options="wav for wav in wavForms">
 								</select>

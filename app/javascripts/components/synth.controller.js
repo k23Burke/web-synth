@@ -19,18 +19,23 @@ app.controller('SynthController',
     $scope.synth = new SynthFactory();
     $scope.synth.initialize();
     console.log('SYNTH', $scope.synth);
+    $scope.keyCurrentlyPressed = false;
 
 
 
     $scope.keyPressed = function (event) {
+        $scope.keyCurrentlyPressed = true;
         console.log('KEY PRESSED', event.keyCode);
+        console.log('KEY PRESSED', $scope.keyCurrentlyPressed);
         if($scope.enableComputerKeyboardMidi) {
             $scope.synth.noteOn(event.keyCode, 100);
         }
     }
 
     $scope.keyReleased = function(event) {
+        $scope.keyCurrentlyPressed = false;
         console.log('KEY RELEASED', event.keyCode+22-60);
+        console.log('KEY RELEASED', $scope.keyCurrentlyPressed);
         if ($scope.enableComputerKeyboardMidi) {
             $scope.synth.noteOff(event.keyCode+22);
         }
@@ -80,12 +85,17 @@ app.controller('SynthController',
                         first.value.onmidimessage = function(e) {              
                             switch(e.data[0]) {
                                 case 144:
-                                    console.log('NOTE HIT');
+                                    $scope.keyCurrentlyPressed = true;
+                                    console.log('NOTE HIT', $scope.keyCurrentlyPressed);
                                     $scope.synth.noteOn(e.data[1], e.data[2]);
+                                    $scope.$digest();
                                 break;
                                 case 128:
-                                    console.log('NOTE RELEASE');
+                                    $scope.keyCurrentlyPressed = false;
+                                    console.log('NOTE RELEASE', $scope.keyCurrentlyPressed);
                                     $scope.synth.noteOff(e.data[1]);
+                                    $scope.$digest();
+                                    
                                 break;
                                 case 224:
                                     // SynthFactory.detune(e.data[2]);
@@ -102,7 +112,7 @@ app.controller('SynthController',
                         $scope.noMidiMessage = "Plug in a MIDI device and reload";
                         $window.setTimeout(function() {
                             $scope.messageDelivered = true;
-                            $scope.$digest(); 
+                            $scope.$digest();
                         }, 3000);
                         console.log($scope.noMidi);
                         console.log($scope.noMidiMessage);
