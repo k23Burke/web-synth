@@ -21,8 +21,8 @@ app.factory('SynthFactory', ['Oscillator', function (Oscillator) {
 
 		this.oscillators.forEach(function (osc, i) {
 			osc.active = true;
-            osc.volume.toMaster();
-			// osc.volume.connect(self.filters[i]);
+            osc.volume.connect(self.filters[i]);
+            self.filters[i].toMaster();
 			// self.lfos[i].connect(self.filters[i].frequency);
 			// self.lfos[i].sync();
 			// self.filters[i].connect(self.ppdelay);
@@ -55,33 +55,6 @@ app.factory('SynthFactory', ['Oscillator', function (Oscillator) {
                 console.log('RELEASING OSC', osc);
 	        });
 	    }
-
-	//OSCILLATOR FUNCTIONS
-		synthesizer.prototype.changeActivation = function(index) { //TODO: get this to work
-			this.oscillators[index].active = !this.oscillators[index].active;
-		}
-        synthesizer.prototype.changeWavForm = function (index, wavForm) {
-            this.oscillators[index].wavForm = wavForm;
-        }
-        synthesizer.prototype.changeSubBass = function (index, volume) {
-            this.oscillators[index].subVolume = volume - 50;
-        }
-        synthesizer.prototype.changeADSorR = function (index, value, ADSorR) { //TODO: get this to work
-        	this.oscillators[index][ADSorR] = value;
-        }
-        synthesizer.prototype.changeAttack = function (index, value) {
-            console.log('ARYE HERE')
-            this.oscillators[index].attack = value;
-        }
-        synthesizer.prototype.changeDecay = function (index, value) {
-            this.oscillators[index].decay = value;
-        }
-        synthesizer.prototype.changeSustain = function (index, value) {
-            this.oscillators[index].sustain = value;
-        }
-        synthesizer.prototype.changeRelease = function (index, value) {
-            this.oscillators[index].release = value;
-        }
 
     //EFFECTS FUNCTIONS
         //Filter

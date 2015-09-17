@@ -67,15 +67,28 @@
 								<h1>Filter {{}}</h1>
 								<div>
 									<h6>Filter Type</h6>
-									<select ng-model="filter.type" ng-options="filter for filter in filterTypes">
+									<select 
+										ng-model="ftype" 
+										ng-change="synth.changeFilterType($index, ftype)" 
+										ng-options="filter for filter in filterTypes">
 									</select>
 
 									<h6>Filter Rolloff</h6>
-									<select ng-model="filter.roll" ng-options="roll for roll in filterRolloff">
+									<select 
+										ng-model="froll"
+										ng-change="synth.changeFilterRollOff($index, froll)"
+										ng-options="roll for roll in filterRolloff">
 									</select>
 								</div>
 								<h6>{{FLT1.freq}}</h6>
-								<md-slider flex min="0" max="1000" ng-model="filter.freq" aria-label="blue" id="blue-slider"></md-slider>
+								<md-slider flex 
+									min="0"
+									max="1000"
+									ng-model="ffreq"
+									aria-label="blue"
+									id="blue-slider"
+									ng-change="synth.changeFilterFrequency($index, ffreq)">
+								</md-slider>
 							</div>
 							<hr>
 							<div>
