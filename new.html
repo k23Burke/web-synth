@@ -36,14 +36,13 @@
 						<div class="osc{{$index+1}}">
 							<div class="oscLight" ng-class="{ 'on': keyCurrentlyPressed && oscillator.active}">+</div>
 
-							<h1>Oscillator {{$index}}</h1>
-							<h1>{{keyCurrentlyPressed}} {{oscillator.active}}</h1>
+							<h1>Oscillator {{::$index}}</h1>
+							<!-- <h1>{{keyCurrentlyPressed}} {{oscillator.active}}</h1> -->
 
 							<div>
 								<select ng-model="oscillator.wavForm" ng-options="wav for wav in wavForms">
 								</select>
-								<button ng-click="activate(1)" ng-hide="oscillator.active" type="button" class="btn btn-default">Activate</button>
-								<button ng-click="deactiveate(1)" ng-show="oscillator.active" type="button" class="btn btn-default">Deactiveate</button>
+								<button ng-click="oscillator.active = !oscillator.active" type="button" class="btn btn-default">power</button>
 							</div>
 
 
@@ -59,6 +58,42 @@
 							<md-slider flex min="0" max="10000" ng-model="oscillator.release" aria-label="red" id="red-slider"></md-slider>
 						</div>
 					</div>
+
+
+
+					<div ng-repeat="filter in synth.filters track by $index" class="quarter-cont">
+						<div class="osc1">
+							<div>
+								<h1>Filter {{}}</h1>
+								<div>
+									<h6>Filter Type</h6>
+									<select ng-model="filter.type" ng-options="filter for filter in filterTypes">
+									</select>
+
+									<h6>Filter Rolloff</h6>
+									<select ng-model="filter.roll" ng-options="roll for roll in filterRolloff">
+									</select>
+								</div>
+								<h6>{{FLT1.freq}}</h6>
+								<md-slider flex min="0" max="1000" ng-model="filter.freq" aria-label="blue" id="blue-slider"></md-slider>
+							</div>
+							<hr>
+							<div>
+								<h1>LFO</h1>
+								<div>
+									<h6>Modulation Type </h6>
+									<select ng-model="synth.lfo[$index].type" ng-options="type for type in lfoForms">
+									</select><br/>
+									<h6>Rate</h6>
+									<select ng-model="synth.lfo[$index].rate" ng-options="rate for rate in lfoRates">
+									</select>
+								</div>
+								<div>
+									<h6>{{LFO1.dist}}</h6>
+									<md-slider flex min="0" max="1000" ng-model="synth.lfo[$index].dist" aria-label="blue" id="blue-slider"></md-slider>
+								</div>
+							</div>
+						</div>
 
 	<!-- 
 					<div class="quarter-cont" ng-class="{notActive:!OSC2.active}">
@@ -153,7 +188,6 @@
 							</div>
 						</div>
 					</div> -->
-				</div>
 			<!-- <div class="clearfix">
 				<div class="quarter-cont">
 					<div class="osc2">

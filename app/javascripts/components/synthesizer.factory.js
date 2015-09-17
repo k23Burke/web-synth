@@ -70,6 +70,7 @@ app.factory('SynthFactory', ['Oscillator', function (Oscillator) {
         	this.oscillators[index][ADSorR] = value;
         }
         synthesizer.prototype.changeAttack = function (index, value) {
+            console.log('ARYE HERE')
             this.oscillators[index].attack = value;
         }
         synthesizer.prototype.changeDecay = function (index, value) {
