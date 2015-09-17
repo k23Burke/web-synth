@@ -17,23 +17,23 @@ app.factory('SynthFactory', ['Oscillator', function (Oscillator) {
 		this.oscillators = [new Oscillator(), new Oscillator()];
 		this.filters = [new Tone.Filter(200, 'lowpass'), new Tone.Filter(200, 'lowpass')];
 		this.lfos = [new Tone.LFO("4m", 100, 600), new Tone.LFO("4m", 100, 600)];
+        Tone.Transport.start();
         var self = this;
 
-		this.oscillators.forEach(function (osc, i) {
-			osc.active = true;
+        this.oscillators.forEach(function (osc, i) {
+            osc.active = true;
             osc.volume.connect(self.filters[i]);
+            self.lfos[i].connect(self.filters[i].frequency);
+            self.lfos[i].sync();
             self.filters[i].toMaster();
-			// self.lfos[i].connect(self.filters[i].frequency);
-			// self.lfos[i].sync();
-			// self.filters[i].connect(self.ppdelay);
-		})
+            // self.filters[i].connect(self.ppdelay);
+        })
 
         // this.ppdelay.wet.value = 0.2;
         // this.ppdelay.connect(this.chorus);
         // this.chorus.connect(this.bit);
         // this.bit.connect(this.phaser);
         // this.phaser.toMaster();
-        Tone.Transport.start();
     }
 
 
@@ -78,6 +78,7 @@ app.factory('SynthFactory', ['Oscillator', function (Oscillator) {
 	        	this.lfos[index].max = midFreq + depth;
 	        }
 	        synthesizer.prototype.changeLFORate = function (index, rate) {
+                console.log('THIS ERROR', this)
 	        	this.lofs[index].frequency.value = rate;
 	        }
         //PP DELAY

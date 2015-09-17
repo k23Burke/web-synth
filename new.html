@@ -68,15 +68,15 @@
 								<div>
 									<h6>Filter Type</h6>
 									<select 
-										ng-model="ftype" 
-										ng-change="synth.changeFilterType($index, ftype)" 
+										ng-model="fDefault[$index].type" 
+										ng-change="synth.changeFilterType($index, fDefault[$index].type)" 
 										ng-options="filter for filter in filterTypes">
 									</select>
 
 									<h6>Filter Rolloff</h6>
 									<select 
-										ng-model="froll"
-										ng-change="synth.changeFilterRollOff($index, froll)"
+										ng-model="fDefault[$index].roll"
+										ng-change="synth.changeFilterRollOff($index, fDefault[$index].roll)"
 										ng-options="roll for roll in filterRolloff">
 									</select>
 								</div>
@@ -84,10 +84,10 @@
 								<md-slider flex 
 									min="0"
 									max="1000"
-									ng-model="ffreq"
+									ng-model="fDefault[$index].freq"
 									aria-label="blue"
 									id="blue-slider"
-									ng-change="synth.changeFilterFrequency($index, ffreq)">
+									ng-change="synth.changeFilterFrequency($index, fDefault[$index].freq)">
 								</md-slider>
 							</div>
 							<hr>
@@ -95,15 +95,28 @@
 								<h1>LFO</h1>
 								<div>
 									<h6>Modulation Type </h6>
-									<select ng-model="synth.lfo[$index].type" ng-options="type for type in lfoForms">
+									<select 
+										ng-model="ltype"
+										ng-change="synth.changeLFOType($index, ltype)"
+										ng-options="type for type in lfoForms">
 									</select><br/>
 									<h6>Rate</h6>
-									<select ng-model="synth.lfo[$index].rate" ng-options="rate for rate in lfoRates">
+									<select 
+										ng-model="lrate"
+										ng-change="synth.changeLFORate($index, lrate)"
+										ng-options="rate for rate in lfoRates">
 									</select>
 								</div>
 								<div>
 									<h6>{{LFO1.dist}}</h6>
-									<md-slider flex min="0" max="1000" ng-model="synth.lfo[$index].dist" aria-label="blue" id="blue-slider"></md-slider>
+									<md-slider flex 
+										min="0" 
+										max="1000" 
+										ng-model="ldist" 
+										ng-change="synth.changeLFODepth($index, ldist)"
+										aria-label="blue" 
+										id="blue-slider">
+									</md-slider>
 								</div>
 							</div>
 						</div>

@@ -13,6 +13,7 @@ app.controller('SynthController',
     $scope.wavForms = ['sine','square','triangle','sawtooth', 'pulse', 'pwm'];
     $scope.filterRolloff = [-12, -24, -48];
     $scope.filterTypes = ["lowpass", "highpass", "bandpass", "lowshelf", "highshelf", "notch", "allpass", "peaking"];
+    $scope.fDefault = [{type:'lowpass',roll:-12,freq:400},{type:'lowpass',roll:-12,freq:400}];
     $scope.lfoRates = ["8m","4m","2m","1m","2n","3n","4n","8n","12n","16n"];
     $scope.lfoForms = ['sine','square','triangle','sawtooth'];
 
@@ -95,7 +96,7 @@ app.controller('SynthController',
                                     console.log('NOTE RELEASE', $scope.keyCurrentlyPressed);
                                     $scope.synth.noteOff(e.data[1]);
                                     $scope.$digest();
-                                    
+
                                 break;
                                 case 224:
                                     // SynthFactory.detune(e.data[2]);
