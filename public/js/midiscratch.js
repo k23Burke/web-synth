@@ -221,6 +221,8 @@ angular
         var lfo1 = new Tone.LFO("4m", 100, 600);
         lfo1.connect(filt.frequency);
         lfo1.sync();
+        console.log('FREQ INIT', filt.frequency.value)
+
 
         var lfo2 = new Tone.LFO("4m", 100, 600);
         lfo2.connect(filt2.frequency);
@@ -362,6 +364,7 @@ angular
                 lfo1.type = type;
             }
             function changeLFO1Depth(num) {
+                console.log('FREQ', filt.frequency.value)
                 var midFreq = filt.frequency.value;
                 lfo1.min = midFreq - num;
                 lfo1.max = midFreq + num;

@@ -69,20 +69,24 @@ app.factory('SynthFactory', ['Oscillator', function (Oscillator) {
 	   		}
         //LFO
 	        synthesizer.prototype.changeLFOType = function (index, type) {
-                console.log('TYPE ERROR?', this)
 	        	this.lfos[index].type = type;
 	        }
 
-	        synthesizer.prototype.changeLFODepth = function (index, depth) {
-	        	var midFreq = this.filters[index].frequency.value;
-	        	this.lfos[index].min = midFreq - depth;
-	        	this.lfos[index].max = midFreq + depth;
-	        }
-	        synthesizer.prototype.changeLFORate = function (index, rate) {
-                debugger;
-                console.log('THIS', this)
-                console.log('THIS oscillators?', this.oscillators)
-                console.log('THIS ERROR', this.lfos)
+	        // synthesizer.prototype.changeLFOMin = function (index, freq) {
+	        // 	var midFreq = this.filters[index].frequency.value;
+	        // 	this.lfos[index].min = midFreq - depth;
+	        // 	this.lfos[index].max = midFreq + depth;
+	        // }
+            synthesizer.prototype.changeLFODepth = function (index, depth) {
+                console.log('DEPTHING', index, depth)
+                var midFreq = this.filters[index].frequency.value;
+                console.log('DEPTHING', midFreq);
+                this.lfos[index].min = midFreq - depth;
+                this.lfos[index].max = midFreq + depth;
+                console.log('min', this.lfos[index].min);
+                console.log('MAX', this.lfos[index].max);
+            }
+            synthesizer.prototype.changeLFORate = function (index, rate) {
 	        	this.lfos[index].frequency.value = rate;
 	        }
         //PP DELAY
