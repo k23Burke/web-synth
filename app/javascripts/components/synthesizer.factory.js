@@ -69,6 +69,7 @@ app.factory('SynthFactory', ['Oscillator', function (Oscillator) {
 	   		}
         //LFO
 	        synthesizer.prototype.changeLFOType = function (index, type) {
+                console.log('TYPE ERROR?', this)
 	        	this.lfos[index].type = type;
 	        }
 
@@ -78,8 +79,11 @@ app.factory('SynthFactory', ['Oscillator', function (Oscillator) {
 	        	this.lfos[index].max = midFreq + depth;
 	        }
 	        synthesizer.prototype.changeLFORate = function (index, rate) {
-                console.log('THIS ERROR', this)
-	        	this.lofs[index].frequency.value = rate;
+                debugger;
+                console.log('THIS', this)
+                console.log('THIS oscillators?', this.oscillators)
+                console.log('THIS ERROR', this.lfos)
+	        	this.lfos[index].frequency.value = rate;
 	        }
         //PP DELAY
             synthesizer.prototype.changePPTime = function (time) {

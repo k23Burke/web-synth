@@ -14,6 +14,7 @@ app.controller('SynthController',
     $scope.filterRolloff = [-12, -24, -48];
     $scope.filterTypes = ["lowpass", "highpass", "bandpass", "lowshelf", "highshelf", "notch", "allpass", "peaking"];
     $scope.fDefault = [{type:'lowpass',roll:-12,freq:400},{type:'lowpass',roll:-12,freq:400}];
+    $scope.lDefault = [{type:'sine',rate:"4m",depth:0, min:100, max:600},{type:'sine',rate:"4m",depth:0,min:100, max:600}];
     $scope.lfoRates = ["8m","4m","2m","1m","2n","3n","4n","8n","12n","16n"];
     $scope.lfoForms = ['sine','square','triangle','sawtooth'];
 

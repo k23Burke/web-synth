@@ -80,7 +80,7 @@
 										ng-options="roll for roll in filterRolloff">
 									</select>
 								</div>
-								<h6>{{FLT1.freq}}</h6>
+								<h6>{{fDefault[$index].freq}}</h6>
 								<md-slider flex 
 									min="0"
 									max="1000"
@@ -96,28 +96,39 @@
 								<div>
 									<h6>Modulation Type </h6>
 									<select 
-										ng-model="ltype"
-										ng-change="synth.changeLFOType($index, ltype)"
+										ng-model="lDefault[$index].type"
+										ng-change="synth.changeLFOType($index, lDefault[$index].type)"
 										ng-options="type for type in lfoForms">
 									</select><br/>
 									<h6>Rate</h6>
 									<select 
-										ng-model="lrate"
-										ng-change="synth.changeLFORate($index, lrate)"
+										ng-model="lDefault[$index].rate"
+										ng-change="synth.changeLFORate($index, lDefault[$index].rate)"
 										ng-options="rate for rate in lfoRates">
 									</select>
 								</div>
 								<div>
-									<h6>{{LFO1.dist}}</h6>
+									<h6>{{lDefault[$index].min}}</h6>
 									<md-slider flex 
 										min="0" 
 										max="1000" 
-										ng-model="ldist" 
-										ng-change="synth.changeLFODepth($index, ldist)"
+										ng-model="lDefault[$index].depth" 
+										ng-change="synth.changeLFODepth($index, lDefault[$index].depth)"
 										aria-label="blue" 
 										id="blue-slider">
 									</md-slider>
 								</div>
+								<!-- <div>
+									<h6>{{lDefault[$index].max}}</h6>
+									<md-slider flex 
+										min="lDefault[$index].min" 
+										max="1000" 
+										ng-model="lDefault[$index].max" 
+										ng-change="synth.changeLFODepth($index, lDefault[$index].max)"
+										aria-label="blue" 
+										id="blue-slider">
+									</md-slider>
+								</div> -->
 							</div>
 						</div>
 
@@ -296,8 +307,8 @@
 
 
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular.min.js"></script>
-	<script type="text/javascript" src="js/vendor/tone.js"></script>
-	<!-- // <script type="text/javascript" src="http://cdn.tonejs.org/latest/Tone.min.js"></script> -->
+	<!-- // <script type="text/javascript" src="js/vendor/tone.js"></script> -->
+	<script type="text/javascript" src="http://cdn.tonejs.org/latest/Tone.min.js"></script>
 
 	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular-animate.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular-aria.min.js"></script>
