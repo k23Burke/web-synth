@@ -36,10 +36,10 @@ app.controller('SynthController',
 
     $scope.keyReleased = function(event) {
         $scope.keyCurrentlyPressed = false;
-        console.log('KEY RELEASED', event.keyCode+22-60);
+        console.log('KEY RELEASED', event.keyCode);
         console.log('KEY RELEASED', $scope.keyCurrentlyPressed);
         if ($scope.enableComputerKeyboardMidi) {
-            $scope.synth.noteOff(event.keyCode+22);
+            $scope.synth.noteOff(event.keyCode);
         }
     }
 
