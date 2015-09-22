@@ -1,22 +1,3 @@
-/*
-$col-lest: #FFDDAA;
-$col-l: #D7AC6B;
-$col-m: #AE7F3A;
-$col-d: #865A18;
-$col-dest: #5A3601;
-.profile-pic {
-  float: left;
-  width: 250px;
-  @media screen and (max-width: $break-small) {
-    width: 100px;
-    float: none;
-  }
-  @media screen and (min-width: $break-large) {
-    float: right;
-  }
-}
-
-*/
 * {
   box-sizing: border-box; }
 

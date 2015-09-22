@@ -23,6 +23,10 @@ app.controller('SynthController',
     console.log('SYNTH', $scope.synth);
     $scope.keyCurrentlyPressed = false;
 
+    $scope.lfoInit = function(index, type, depth, rate) {
+        $scope.synth.lfos[index].active = !$scope.synth.lfos[index].active
+        $scope.synth.initializeLFO(index, type, depth, rate); 
+    }
 
 
     $scope.keyPressed = function (event) {

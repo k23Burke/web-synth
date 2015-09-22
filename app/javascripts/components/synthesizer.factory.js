@@ -23,9 +23,10 @@ app.factory('SynthFactory', ['Oscillator', function (Oscillator) {
         this.oscillators.forEach(function (osc, i) {
             osc.active = true;
             osc.volume.connect(self.filters[i]);
-            self.lfos[i].connect(self.filters[i].frequency);
-            self.lfos[i].sync();
+            // self.lfos[i].connect(self.filters[i].frequency);
+            // self.lfos[i].sync();
             self.filters[i].toMaster();
+            self.lfos[i].active = false;
             // self.filters[i].connect(self.ppdelay);
         })
 
@@ -89,6 +90,20 @@ app.factory('SynthFactory', ['Oscillator', function (Oscillator) {
             synthesizer.prototype.changeLFORate = function (index, rate) {
 	        	this.lfos[index].frequency.value = rate;
 	        }
+            synthesizer.prototype.initializeLFO = function (index, type, depth, rate) {
+                var midFreq = this.filters[index].frequency.value;
+                console.log('DEPTHING', midFreq);
+                this.lfos[index].min = 300 - depth;
+                this.lfos[index].max = 300 + depth;
+                console.log('min', this.lfos[index].min);
+                console.log('MAX', this.lfos[index].max);
+                this.lfos[index].frequency.value = rate;
+                this.lfos[index].type = type;
+
+                this.lfos[index].connect(this.filters[index].frequency);
+                this.lfos[index].sync();
+
+            }
         //PP DELAY
             synthesizer.prototype.changePPTime = function (time) {
                 this.ppdelay.delayTime.value = time;

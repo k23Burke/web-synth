@@ -39,7 +39,6 @@
 							<div class="oscLight" ng-class="{ 'on': keyCurrentlyPressed && oscillator.active}">+</div>
 
 							<h1>Oscillator {{::$index}}</h1>
-							<!-- <h1>{{keyCurrentlyPressed}} {{oscillator.active}}</h1> -->
 
 							<div>
 								<select ng-model="oscillator.wavForm" ng-options="wav for wav in wavForms">
@@ -94,6 +93,7 @@
 							</div>
 							<hr>
 							<div>
+								<button ng-click="lfoInit($index, lDefault[$index].type, lDefault[$index].depth, lDefault[$index].rate)" type="button" class="btn btn-default">power</button>
 								<h1>LFO</h1>
 								<div>
 									<h6>Modulation Type </h6>
