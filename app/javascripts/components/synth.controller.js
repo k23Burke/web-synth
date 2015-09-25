@@ -1,7 +1,7 @@
 // angular.module('synthesizer')
 app.controller('SynthController', 
-    ['$scope', 'MidiDeviceFactory', 'SynthFactory', '$window', 
-    function ($scope, Devices, SynthFactory, $window) {
+    ['$scope', 'MidiDeviceFactory', 'SynthFactory', '$window', '$timeout', '$q',
+    function ($scope, Devices, SynthFactory, $window, $timeout, $q) {
 //TODO: see how many watchers are on page
     //set scope vars
     $scope.devices = [];
@@ -31,20 +31,35 @@ app.controller('SynthController',
 
     $scope.keyPressed = function (event) {
         $scope.keyCurrentlyPressed = true;
-        console.log('KEY PRESSED', event.keyCode);
-        console.log('KEY PRESSED', $scope.keyCurrentlyPressed);
+        console.log('KEY PRESSED', $scope.synth);
+        // console.log('KEY PRESSED', $scope.keyCurrentlyPressed);
         if($scope.enableComputerKeyboardMidi) {
             $scope.synth.noteOn(event.keyCode, 100);
         }
     }
 
     $scope.keyReleased = function(event) {
-        $scope.keyCurrentlyPressed = false;
-        console.log('KEY RELEASED', event.keyCode);
+        wasLastKeyReleased().then(function(wasNotlastKey){$scope.keyCurrentlyPressed = wasNotlastKey});
         console.log('KEY RELEASED', $scope.keyCurrentlyPressed);
+        // console.log('KEY RELEASED', $scope.keyCurrentlyPressed);
         if ($scope.enableComputerKeyboardMidi) {
             $scope.synth.noteOff(event.keyCode);
         }
+    }
+
+    function wasLastKeyReleased() {
+        var deferred = $q.defer();
+        var notLastKey = true;
+        $timeout(function(){
+            $scope.synth.oscillators.forEach(function(osc) {
+                if(!osc.keys.length) {
+                    notLastKey = false;
+                    console.log('SHUT LIGHT OFF')
+                }
+            })
+            deferred.resolve(notLastKey);
+        }, 0);
+        return deferred.promise;
     }
 
     // $scope.synth.oscillators.forEach(function (osc, index) {
@@ -97,7 +112,7 @@ app.controller('SynthController',
                                     $scope.$digest();
                                 break;
                                 case 128:
-                                    $scope.keyCurrentlyPressed = false;
+                                    wasLastKeyReleased().then(function(wasNotlastKey){$scope.keyCurrentlyPressed = wasNotlastKey});
                                     console.log('NOTE RELEASE', $scope.keyCurrentlyPressed);
                                     $scope.synth.noteOff(e.data[1]);
                                     $scope.$digest();
