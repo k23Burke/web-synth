@@ -25,12 +25,13 @@ app.factory('SynthFactory', ['Oscillator', function (Oscillator) {
             osc.volume.connect(self.filters[i]);
             // self.lfos[i].connect(self.filters[i].frequency);
             // self.lfos[i].sync();
-            self.filters[i].toMaster();
+            // self.filters[i].toMaster();
             self.lfos[i].active = false;
-            // self.filters[i].connect(self.ppdelay);
+            self.filters[i].connect(self.ppdelay);
         })
 
-        // this.ppdelay.wet.value = 0.2;
+        this.ppdelay.wet.value = 0;
+        this.ppdelay.toMaster();
         // this.ppdelay.connect(this.chorus);
         // this.chorus.connect(this.bit);
         // this.bit.connect(this.phaser);
@@ -109,7 +110,7 @@ app.factory('SynthFactory', ['Oscillator', function (Oscillator) {
                 this.ppdelay.delayTime.value = time;
             }
 
-            synthesizer.prototype.changePPFeedback = function (amount) {
+            synthesizer.prototype.changePPFeedback = function (amount) { //TODO: ?????
                 if(amount === 0) {
                     this.ppdelay.wet.value = 0;
                 } else {

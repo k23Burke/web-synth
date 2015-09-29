@@ -133,90 +133,22 @@
 								</div> -->
 							</div>
 						</div>
-
-					<!-- <div class="quarter-cont" ng-class="{notActive:!OSC1.active}">
-						<div class="osc1">
-							<div>
-								<h1>Filter {{FLT1.number}}</h1>
-								<div>
-									<h6>Filter Type</h6>
-									<select ng-model="FLT1.type" ng-options="filter for filter in filterTypes">
-									</select>
-
-									<h6>Filter Rolloff</h6>
-									<select ng-model="FLT1.roll" ng-options="roll for roll in filterRolloff">
-									</select>
-								</div>
-								<h6>{{FLT1.freq}}</h6>
-								<md-slider flex min="0" max="1000" ng-model="FLT1.freq" aria-label="blue" id="blue-slider"></md-slider>
-							</div>
-							<hr>
-							<div>
-								<h1>LFO</h1>
-								<div>
-									<h6>Modulation Type </h6>
-									<select ng-model="LFO1.type" ng-options="type for type in lfoForms">
-									</select><br/>
-									<h6>Rate</h6>
-									<select ng-model="LFO1.rate" ng-options="rate for rate in lfoRates">
-									</select>
-								</div>
-								<div>
-									<h6>{{LFO1.dist}}</h6>
-									<md-slider flex min="0" max="1000" ng-model="LFO1.dist" aria-label="blue" id="blue-slider"></md-slider>
-								</div>
-							</div>
-						</div>
 					</div>
-					<div class="quarter-cont" ng-class="{notActive:!OSC2.active}">
-						<div class="osc2">
-							<div>
-								<h1>Filter {{FLT2.number}}</h1>
-								<div>
-									<h6>Filter Type</h6>
-									<select ng-model="FLT2.type" ng-options="filter for filter in filterTypes">
-									</select>
 
-									<h6>Filter Rolloff</h6>
-									<select ng-model="FLT2.roll" ng-options="roll for roll in filterRolloff">
-									</select>
-								</div>
+					<div class="clearfix">
+						<div class="quarter-cont">
+							<div class="osc2">
 
-								<h6>{{FLT2.freq}}</h6>
-								<md-slider flex min="40" max="1000" ng-model="FLT2.freq" aria-label="blue" id="blue-slider" class="md-primary"></md-slider>
-							</div>
-							<hr>
-							<div>
-								<h1>LFO</h1>
+								<h1>PingPong Delay</h1>
 								<div>
-									<h6>Modulation Type</h6>
-									<select ng-model="LFO2.type" ng-options="type for type in lfoForms">
-									</select><br/>
-									<h6>Rate</h6>
-									<select ng-model="LFO2.rate" ng-options="rate for rate in lfoRates">
-									</select>
+									<md-slider flex min="0" max="1000" ng-change="synth.changePPFeedback(synthPingPong.feedback)" ng-model="synthPingPong.feedback" aria-label="blue" id="blue-slider"></md-slider>
 								</div>
-								<div>
-									<h6>{{LFO2.dist}}</h6>
-									<md-slider flex min="0" max="1000" ng-model="LFO2.dist" aria-label="blue" id="blue-slider" class="md-primary"></md-slider>
-								</div>
+								<select ng-model="synthPingPong.time" ng-change="synth.changePPTime(synthPingPong.time)" ng-options="rate for rate in lfoRates">
+								</select>
 							</div>
 						</div>
-					</div> -->
-			<!-- <div class="clearfix">
-				<div class="quarter-cont">
-					<div class="osc2">
 
-						<h1>PingPong Delay</h1>
-						<div>
-							<md-slider flex min="0" max="1000" ng-model="PPD.feedback" aria-label="blue" id="blue-slider"></md-slider>
-						</div>
-						<select ng-model="PPD.time" ng-options="rate for rate in lfoRates">
-						</select>
-					</div>
-				</div>
-
-				<div class="quarter-cont">
+				<!--<div class="quarter-cont">
 					<div class="osc2">
 
 						<h1>Chorus Effect</h1>
@@ -275,8 +207,8 @@
 							<md-slider flex min="0" max="1000" ng-model="PHS.wet" aria-label="blue" id="blue-slider"></md-slider>
 						</div>
 					</div>
+				</div>-->
 				</div>
-			</div> -->
 			</div>
 		</div>
 	</div>
