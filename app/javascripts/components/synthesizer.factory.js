@@ -31,8 +31,8 @@ app.factory('SynthFactory', ['Oscillator', function (Oscillator) {
         })
 
         this.ppdelay.wet.value = 0;
-        this.ppdelay.toMaster();
-        // this.ppdelay.connect(this.chorus);
+        this.ppdelay.connect(this.chorus);
+        this.chorus.toMaster();
         // this.chorus.connect(this.bit);
         // this.bit.connect(this.phaser);
         // this.phaser.toMaster();

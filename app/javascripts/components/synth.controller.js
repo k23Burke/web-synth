@@ -17,7 +17,8 @@ app.controller('SynthController',
     $scope.lDefault = [{type:'sine',rate:"4m",depth:0, min:100, max:600},{type:'sine',rate:"4m",depth:0,min:100, max:600}];
     $scope.lfoRates = ["8m","4m","2m","1m","2n","3n","4n","8n","12n","16n"];
     $scope.lfoForms = ['sine','square','triangle','sawtooth'];
-    $scope.synthPingPong = {time:'1m', feedback: 0}
+    $scope.synthPingPong = {time:'1m', feedback: 0};
+    $scope.synthChorus = {wetness:0, freequency: 0, depth: 0, time: 0};
 
     $scope.synth = new SynthFactory();
     $scope.synth.initialize();
