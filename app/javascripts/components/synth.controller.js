@@ -19,6 +19,7 @@ app.controller('SynthController',
     $scope.lfoForms = ['sine','square','triangle','sawtooth'];
     $scope.synthPingPong = {time:'1m', feedback: 0};
     $scope.synthChorus = {wetness:0, freequency: 0, depth: 0, time: 0};
+    $scope.synthBitcrusher = {bits: 1, wet: 0};
 
     $scope.synth = new SynthFactory();
     $scope.synth.initialize();

@@ -172,22 +172,22 @@
 					</div>
 				</div>
 
-				<!--<div class="quarter-cont">
+				<div class="quarter-cont">
 					<div class="osc2">
 
 						<h1>Bit Crusher</h1>
 						<div>
-							<h6>BITS TO CRUSH {{BTC.bit}}</h6>
-							<md-slider flex min="1" max="8" ng-model="BTC.bit" aria-label="blue" id="blue-slider"></md-slider>
+							<h6>BITS TO CRUSH {{synthBitcrusher.bit}}</h6>
+							<md-slider flex min="0" max="8" ng-model="synthBitcrusher.bit" ng-change="synth.changeBCBits(synthBitcrusher.bit)" aria-label="blue" id="blue-slider"></md-slider>
 						</div>
 						<div>
-							<h6>WETNESS {{BTC.wet / 1000}}</h6>
-							<md-slider flex min="0" max="1000" ng-model="BTC.wet" aria-label="blue" id="blue-slider"></md-slider>
+							<h6>WETNESS {{synthBitcrusher.wet}}</h6>
+							<md-slider flex min="0" max="1000" ng-model="synthBitcrusher.wet" ng-change="synth.changeBCWet(synthBitcrusher.wet)" aria-label="blue" id="blue-slider"></md-slider>
 						</div>
 					</div>
 				</div>
 
-				<div class="quarter-cont">
+				<!--<div class="quarter-cont">
 					<div class="osc2">
 
 						<h1>Phase Effect</h1>

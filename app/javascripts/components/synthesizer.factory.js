@@ -8,8 +8,10 @@ app.factory('SynthFactory', ['Oscillator', function (Oscillator) {
 
         //effects
         this.ppdelay = new Tone.PingPongDelay("8n", 0);
-        this.chorus = new Tone.Chorus(2, 3.5, 0.7);
-        this.bit = new Tone.BitCrusher(1);
+        // this.chorus = new Tone.Chorus(2, 3.5, 0.7);
+        this.chorus = new Tone.Chorus(0, 0, 0);
+        // this.bit = new Tone.BitCrusher(1);
+        this.bit = new Tone.BitCrusher(0);
         this.phaser = new Tone.Phaser(0.5, 10, 400);
 	}
 
@@ -32,8 +34,8 @@ app.factory('SynthFactory', ['Oscillator', function (Oscillator) {
 
         this.ppdelay.wet.value = 0;
         this.ppdelay.connect(this.chorus);
-        this.chorus.toMaster();
-        // this.chorus.connect(this.bit);
+        this.chorus.connect(this.bit);
+        this.bit.toMaster();
         // this.bit.connect(this.phaser);
         // this.phaser.toMaster();
     }
