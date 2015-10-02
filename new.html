@@ -134,81 +134,83 @@
 							</div>
 						</div>
 					</div>
+				</div>
+			</div>
+			<div class="full">
+				<div class="clearfix">
+					<div class="quarter-cont">
+						<div class="osc2">
 
-					<div class="clearfix">
-						<div class="quarter-cont">
-							<div class="osc2">
+							<h1>PingPong Delay</h1>
+							<div>
+								<h6>{{synthPingPong.feedback}}</h6>
+								<md-slider flex min="0" max="1000" ng-change="synth.changePPFeedback(synthPingPong.feedback)" ng-model="synthPingPong.feedback" aria-label="blue" id="blue-slider"></md-slider>
+							</div>
+							<select ng-model="synthPingPong.time" ng-change="synth.changePPTime(synthPingPong.time)" ng-options="rate for rate in lfoRates">
+							</select>
+						</div>
+					</div>
 
-								<h1>PingPong Delay</h1>
-								<div>
-									<h6>{{synthPingPong.feedback}}</h6>
-									<md-slider flex min="0" max="1000" ng-change="synth.changePPFeedback(synthPingPong.feedback)" ng-model="synthPingPong.feedback" aria-label="blue" id="blue-slider"></md-slider>
-								</div>
-								<select ng-model="synthPingPong.time" ng-change="synth.changePPTime(synthPingPong.time)" ng-options="rate for rate in lfoRates">
-								</select>
+					<div class="quarter-cont">
+						<div class="osc2">
+
+							<h1>Chorus Effect</h1>
+							<div>
+								<h6>WETNESS {{synthChorus.wetness}}</h6>
+								<md-slider flex min="0" max="1000" ng-model="synthChorus.wetness" ng-change="synth.changeChorWetness(synthChorus.wetness)" aria-label="blue" id="blue-slider"></md-slider>
+							</div>
+							<div>
+								<h6>FREQ {{synthChorus.frequency}}</h6>
+								<md-slider flex min="0" max="1000" ng-model="synthChorus.frequency" ng-change="synth.changeChorFreq(synthChorus.frequency)" aria-label="blue" id="blue-slider"></md-slider>
+							</div>
+							<div>
+								<h6>DEPTH {{synthChorus.depth}}</h6>
+								<md-slider flex min="0" max="1000" ng-model="synthChorus.depth" ng-change="synth.changeChorDepth(synthChorus.depth)" aria-label="blue" id="blue-slider"></md-slider>
+							</div>
+							<div>
+								<h6>TIME {{synthChorus.time}}</h6>
+								<md-slider flex min="0" max="1000" ng-model="synthChorus.time" ng-change="synth.changeChorDelayTime(synthChorus.time)" aria-label="blue" id="blue-slider"></md-slider>
 							</div>
 						</div>
+					</div>
 
-				<div class="quarter-cont">
-					<div class="osc2">
+					<div class="quarter-cont">
+						<div class="osc2">
 
-						<h1>Chorus Effect</h1>
-						<div>
-							<h6>WETNESS {{synthChorus.wetness}}</h6>
-							<md-slider flex min="0" max="1000" ng-model="synthChorus.wetness" ng-change="synth.changeChorWetness(synthChorus.wetness)" aria-label="blue" id="blue-slider"></md-slider>
-						</div>
-						<div>
-							<h6>FREQ {{synthChorus.frequency}}</h6>
-							<md-slider flex min="0" max="1000" ng-model="synthChorus.frequency" ng-change="synth.changeChorFreq(synthChorus.frequency)" aria-label="blue" id="blue-slider"></md-slider>
-						</div>
-						<div>
-							<h6>DEPTH {{synthChorus.depth}}</h6>
-							<md-slider flex min="0" max="1000" ng-model="synthChorus.depth" ng-change="synth.changeChorDepth(synthChorus.depth)" aria-label="blue" id="blue-slider"></md-slider>
-						</div>
-						<div>
-							<h6>TIME {{synthChorus.time}}</h6>
-							<md-slider flex min="0" max="1000" ng-model="synthChorus.time" ng-change="synth.changeChorDelayTime(synthChorus.time)" aria-label="blue" id="blue-slider"></md-slider>
+							<h1>Bit Crusher</h1>
+							<div>
+								<h6>BITS TO CRUSH {{synthBitcrusher.bit}}</h6>
+								<md-slider flex min="0" max="8" ng-model="synthBitcrusher.bit" ng-change="synth.changeBCBits(synthBitcrusher.bit)" aria-label="blue" id="blue-slider"></md-slider>
+							</div>
+							<div>
+								<h6>WETNESS {{synthBitcrusher.wet}}</h6>
+								<md-slider flex min="0" max="1000" ng-model="synthBitcrusher.wet" ng-change="synth.changeBCWet(synthBitcrusher.wet)" aria-label="blue" id="blue-slider"></md-slider>
+							</div>
 						</div>
 					</div>
-				</div>
 
-				<div class="quarter-cont">
-					<div class="osc2">
+					<div class="quarter-cont">
+						<div class="osc2">
 
-						<h1>Bit Crusher</h1>
-						<div>
-							<h6>BITS TO CRUSH {{synthBitcrusher.bit}}</h6>
-							<md-slider flex min="0" max="8" ng-model="synthBitcrusher.bit" ng-change="synth.changeBCBits(synthBitcrusher.bit)" aria-label="blue" id="blue-slider"></md-slider>
-						</div>
-						<div>
-							<h6>WETNESS {{synthBitcrusher.wet}}</h6>
-							<md-slider flex min="0" max="1000" ng-model="synthBitcrusher.wet" ng-change="synth.changeBCWet(synthBitcrusher.wet)" aria-label="blue" id="blue-slider"></md-slider>
+							<h1>Phase Effect</h1>
+							<div>
+								<h6>BASE {{synthPhaser.base}}</h6>
+								<md-slider flex min="0" max="1000" ng-model="synthPhaser.base" ng-change="synth.changePhaserBase(synthPhaser.base)" aria-label="blue" id="blue-slider"></md-slider>
+							</div>
+							<div>
+								<h6>FREQ {{synthPhaser.freq}}</h6>
+								<md-slider flex min="0" max="1000" ng-model="synthPhaser.freq" ng-change="synth.changePhaserFreq(synthPhaser.freq)" aria-label="blue" id="blue-slider"></md-slider>
+							</div>
+							<div>
+								<h6>DEPTH {{synthPhaser.depth / 1000}}</h6>
+								<md-slider flex min="0" max="1000" ng-model="synthPhaser.depth" ng-change="synth.changePhaserDepth(synthPhaser.depth)" aria-label="blue" id="blue-slider"></md-slider>
+							</div>
+							<div>
+								<h6>WETNESS {{synthPhaser.wet / 1000}}</h6>
+								<md-slider flex min="0" max="1000" ng-model="synthPhaser.wet" ng-change="synth.changePhaserWet(synthPhaser.wet)" aria-label="blue" id="blue-slider"></md-slider>
+							</div>
 						</div>
 					</div>
-				</div>
-
-				<!--<div class="quarter-cont">
-					<div class="osc2">
-
-						<h1>Phase Effect</h1>
-						<div>
-							<h6>BASE {{PHS.base}}</h6>
-							<md-slider flex min="0" max="1000" ng-model="PHS.base" aria-label="blue" id="blue-slider"></md-slider>
-						</div>
-						<div>
-							<h6>FREQ {{PHS.freq}}</h6>
-							<md-slider flex min="0" max="1000" ng-model="PHS.freq" aria-label="blue" id="blue-slider"></md-slider>
-						</div>
-						<div>
-							<h6>DEPTH {{PHS.depth / 1000}}</h6>
-							<md-slider flex min="0" max="1000" ng-model="PHS.depth" aria-label="blue" id="blue-slider"></md-slider>
-						</div>
-						<div>
-							<h6>WETNESS {{PHS.wet / 1000}}</h6>
-							<md-slider flex min="0" max="1000" ng-model="PHS.wet" aria-label="blue" id="blue-slider"></md-slider>
-						</div>
-					</div>
-				</div>-->
 				</div>
 			</div>
 		</div>

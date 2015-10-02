@@ -12,7 +12,8 @@ app.factory('SynthFactory', ['Oscillator', function (Oscillator) {
         this.chorus = new Tone.Chorus(0, 0, 0);
         // this.bit = new Tone.BitCrusher(1);
         this.bit = new Tone.BitCrusher(0);
-        this.phaser = new Tone.Phaser(0.5, 10, 400);
+        // this.phaser = new Tone.Phaser(0.5, 10, 400);
+        this.phaser = new Tone.Phaser(0, 0, 0);
 	}
 
 	synthesizer.prototype.initialize = function () {
@@ -35,9 +36,10 @@ app.factory('SynthFactory', ['Oscillator', function (Oscillator) {
         this.ppdelay.wet.value = 0;
         this.ppdelay.connect(this.chorus);
         this.chorus.connect(this.bit);
-        this.bit.toMaster();
-        // this.bit.connect(this.phaser);
-        // this.phaser.toMaster();
+        this.bit.connect(this.phaser);
+        this.bit.wet.value = 0; //TODO: this shouldn't have to happen
+        this.phaser.wet = 0;
+        this.phaser.toMaster();
     }
 
 
