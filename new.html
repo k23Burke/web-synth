@@ -1,6 +1,6 @@
 <!doctype html>
 
-<html lang="en">
+<html lang="en" ng-app="synthesizer">
 <head>
 	<meta charset="utf-8">
 
@@ -18,10 +18,9 @@
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
 </head>
 
-<body id="web-container">
-	<div ng-app="synthesizer">
-		<div ng-controller="SynthController" class="clearfix">
-			<input type="text" name="" value="" ng-keypress="keyPressed($event)" ng-keyup="keyReleased($event)">
+<body id="web-container" ng-controller="SynthController" ng-keypress="keyPressed($event)" ng-keyup="keyReleased($event)">
+	<div>
+		<div class="clearfix">
 			<div ng-hide="noMidi" ng-class="{messageFinished: messageDelivered}">
 				<select ng-model="activeDevice" class="form-control midi-dropdown" ng-options="device.manufacturer + ' ' + device.name for device in devices">
 				    <option value="" disabled>Choose a MIDI device...</option>
@@ -216,7 +215,33 @@
 		</div>
 	</div>
 
-
+<script>
+function getWatchers(root) {
+  root = angular.element(root || document.documentElement);
+  var watcherCount = 0;
+ 
+  function getElemWatchers(element) {
+    var isolateWatchers = getWatchersFromScope(element.data().$isolateScope);
+    var scopeWatchers = getWatchersFromScope(element.data().$scope);
+    var watchers = scopeWatchers.concat(isolateWatchers);
+    angular.forEach(element.children(), function (childElement) {
+      watchers = watchers.concat(getElemWatchers(angular.element(childElement)));
+    });
+    return watchers;
+  }
+  
+  function getWatchersFromScope(scope) {
+    if (scope) {
+      return scope.$$watchers || [];
+    } else {
+      return [];
+    }
+  }
+ 
+  return getElemWatchers(root);
+}
+getWatchers().length
+</script>
 
 
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular.min.js"></script>
