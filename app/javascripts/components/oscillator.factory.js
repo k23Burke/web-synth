@@ -93,5 +93,5 @@ app.factory('Oscillator', function() {
     }
 
     return Oscillator;
-	
+
 })

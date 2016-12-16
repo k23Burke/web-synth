@@ -1,5 +1,8 @@
 // angular.module('synthesizer')
-app.factory('MidiDeviceFactory', ['$window', 'SynthFactory', function ($window, SynthFactory) {
+app.factory('MidiDeviceFactory',
+	['$window', 'SynthFactory',
+	function ($window, SynthFactory) {
+
 	function connectMidiBrowser() {
 		if($window.navigator && 'function' === typeof $window.navigator.requestMIDIAccess) {
 
@@ -21,8 +24,6 @@ app.factory('MidiDeviceFactory', ['$window', 'SynthFactory', function ($window, 
 	        })();
 	        console.log("NAVIGATION", $window.navigator.appName);
 	        console.log("NAMER", $window.navigator.sayswho);
-
-
 
 			return $window.navigator.requestMIDIAccess();
 		} else {
@@ -59,20 +60,20 @@ app.factory('MidiDeviceFactory', ['$window', 'SynthFactory', function ($window, 
 	    * e.data[2] = velocity || detune
 	    */
 
-	    switch(e.data[0]) {
-	        case 144:
-		        console.log('NOTE HIT');
-	            SynthFactory.noteOn(e.data[1], e.data[2]);
-	        break;
-	        case 128:
-		        console.log('NOTE RELEASE');
-	            SynthFactory.releaseNote(e.data[1]);
-	        break;
-	        case 224:
-	            // SynthFactory.detune(e.data[2]);
-	            console.log('NO DETUNE FOR NOW');
-	        break;
-	    }
+	    // switch(e.data[0]) {
+	    //     case 144:
+		   //      console.log('NOTE HIT');
+	    //         SynthFactory.noteOn(e.data[1], e.data[2]);
+	    //     break;
+	    //     case 128:
+		   //      console.log('NOTE RELEASE');
+	    //         SynthFactory.releaseNote(e.data[1]);
+	    //     break;
+	    //     case 224:
+	    //         // SynthFactory.detune(e.data[2]);
+	    //         console.log('NO DETUNE FOR NOW');
+	    //     break;
+	    // }
 
 	}
 

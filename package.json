@@ -28,8 +28,9 @@
     "gulp-concat": "^2.6.0",
     "gulp-plumber": "^1.0.1",
     "gulp-rename": "^1.2.2",
-    "gulp-sass": "^2.0.4",
-    "gulp-uglify": "^1.4.0"
+    "gulp-sass": "^2.3.2",
+    "gulp-uglify": "^1.4.0",
+    "node-sass": "^4.0.0"
   },
   "keywords": [
     "MIDI",

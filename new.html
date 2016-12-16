@@ -18,14 +18,17 @@
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
 </head>
 
-<body id="web-container" ng-controller="SynthController" ng-keypress="keyPressed($event)" ng-keyup="keyReleased($event)">
+<body id="web-container" ng-controller="SynthController">
 	<div>
 		<div class="clearfix">
+			<input id="keyboardSynth" type="text" name="" value="" ng-keypress="keyPressed($event)" ng-keyup="keyReleased($event)">
 			<div ng-hide="noMidi" ng-class="{messageFinished: messageDelivered}">
 				<select ng-model="activeDevice" class="form-control midi-dropdown" ng-options="device.manufacturer + ' ' + device.name for device in devices">
 				    <option value="" disabled>Choose a MIDI device...</option>
 				</select>
 			</div>
+
+			<button ng-click="requestMidiAccess($event)">MIDI</button>
 
 			<div class="midi-dropdown" ng-show="noMidi" ng-class="{messageFinished: messageDelivered}">
 				<h3>{{noMidiMessage}}</h3>
@@ -67,21 +70,21 @@
 								<h1>Filter {{}}</h1>
 								<div>
 									<h6>Filter Type</h6>
-									<select 
-										ng-model="fDefault[$index].type" 
-										ng-change="synth.changeFilterType($index, fDefault[$index].type)" 
+									<select
+										ng-model="fDefault[$index].type"
+										ng-change="synth.changeFilterType($index, fDefault[$index].type)"
 										ng-options="filter for filter in filterTypes">
 									</select>
 
 									<h6>Filter Rolloff</h6>
-									<select 
+									<select
 										ng-model="fDefault[$index].roll"
 										ng-change="synth.changeFilterRollOff($index, fDefault[$index].roll)"
 										ng-options="roll for roll in filterRolloff">
 									</select>
 								</div>
 								<h6>{{fDefault[$index].freq}}</h6>
-								<md-slider flex 
+								<md-slider flex
 									min="0"
 									max="1000"
 									ng-model="fDefault[$index].freq"
@@ -96,13 +99,13 @@
 								<h1>LFO</h1>
 								<div>
 									<h6>Modulation Type </h6>
-									<select 
+									<select
 										ng-model="lDefault[$index].type"
 										ng-change="synth.changeLFOType($index, lDefault[$index].type)"
 										ng-options="type for type in lfoForms">
 									</select><br/>
 									<h6>Rate</h6>
-									<select 
+									<select
 										ng-model="lDefault[$index].rate"
 										ng-change="synth.changeLFORate($index, lDefault[$index].rate)"
 										ng-options="rate for rate in lfoRates">
@@ -110,23 +113,23 @@
 								</div>
 								<div>
 									<h6>{{lDefault[$index].min}}</h6>
-									<md-slider flex 
-										min="0" 
-										max="1000" 
-										ng-model="lDefault[$index].depth" 
+									<md-slider flex
+										min="0"
+										max="1000"
+										ng-model="lDefault[$index].depth"
 										ng-change="synth.changeLFODepth($index, lDefault[$index].depth)"
-										aria-label="blue" 
+										aria-label="blue"
 										id="blue-slider">
 									</md-slider>
 								</div>
 								<!-- <div>
 									<h6>{{lDefault[$index].max}}</h6>
-									<md-slider flex 
-										min="lDefault[$index].min" 
-										max="1000" 
-										ng-model="lDefault[$index].max" 
+									<md-slider flex
+										min="lDefault[$index].min"
+										max="1000"
+										ng-model="lDefault[$index].max"
 										ng-change="synth.changeLFODepth($index, lDefault[$index].max)"
-										aria-label="blue" 
+										aria-label="blue"
 										id="blue-slider">
 									</md-slider>
 								</div> -->
@@ -215,11 +218,11 @@
 		</div>
 	</div>
 
-<script>
+<!-- <script>
 function getWatchers(root) {
   root = angular.element(root || document.documentElement);
   var watcherCount = 0;
- 
+
   function getElemWatchers(element) {
     var isolateWatchers = getWatchersFromScope(element.data().$isolateScope);
     var scopeWatchers = getWatchersFromScope(element.data().$scope);
@@ -229,7 +232,7 @@ function getWatchers(root) {
     });
     return watchers;
   }
-  
+
   function getWatchersFromScope(scope) {
     if (scope) {
       return scope.$$watchers || [];
@@ -237,16 +240,18 @@ function getWatchers(root) {
       return [];
     }
   }
- 
+
   return getElemWatchers(root);
 }
 getWatchers().length
-</script>
+</script> -->
 
 
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular.min.js"></script>
 	<!-- // <script type="text/javascript" src="js/vendor/tone.js"></script> -->
-	<script type="text/javascript" src="http://cdn.tonejs.org/latest/Tone.min.js"></script>
+	<!-- // <script type="text/javascript" src="http://cdn.tonejs.org/latest/Tone.min.js"></script> -->
+	<script type="text/javascript" src="https://tonejs.github.io/CDN/latest/Tone.min.js"></script>
+
 
 	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular-animate.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular-aria.min.js"></script>
